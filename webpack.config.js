@@ -1,26 +1,31 @@
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+const path = require("path");
 
 module.exports = {
-  entry: './src/app/app.tsx',
+  mode: "development",
+  entry: "./src/app/app.tsx",
   plugins: [
-    new CleanWebpackPlugin({
-      cleanAfterEveryBuildPatterns: ['public/build']
-    }),
     new HtmlWebpackPlugin({
-      template: 'src/templates/index.html'
+      template: "src/templates/index.html",
     }),
   ],
   output: {
-    path: __dirname + '/public',
-    filename: 'build/[name].[contenthash].js'
+    path: path.resolve(__dirname, "public"),
+    filename: "build/app.js",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    modules: [path.resolve(__dirname, "node_modules")],
+    extensions: [".ts", ".tsx", ".js"],
   },
   module: {
-    rules: [
-      { test: /\.tsx?$/, loader: 'ts-loader' }
-    ]
-  }
-}
+    rules: [{ test: /\.tsx?$/, loader: "ts-loader" }],
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "public"),
+    },
+    port: 9000,
+  },
+};
