@@ -20,7 +20,16 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js"],
   },
   module: {
-    rules: [{ test: /\.tsx?$/, loader: "ts-loader" }],
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader"
+      },
+    ],
   },
   devServer: {
     static: {

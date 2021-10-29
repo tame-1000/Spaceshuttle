@@ -1,13 +1,16 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { AppBar } from '@material-ui/core';
+import { Toolbar } from '@material-ui/core';
 
-import Nav from "./Nav";
 
 const Layout = (props) => {
   const location = useLocation();
   return (
     <>
-      <Nav location={location} />
+    <AppBar position="static">
+      <Toolbar>Navbar</Toolbar>
+    </AppBar>
       <>{props.children}</>
       {/*<Footer></Footer>*/}
     </>
