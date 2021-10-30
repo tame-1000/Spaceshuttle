@@ -12,6 +12,11 @@ const Top = () => {
       <Link to="/movie" style={{ textDecoration: "none" }}>
         <Button variant="contained">映画を見る</Button>
       </Link>
+      <Link to="/signin" style={{ textDecoration: "none" }}>
+        <Button variant="contained" color="secondary">
+          サインイン
+        </Button>
+      </Link>
     </>
   );
 };
