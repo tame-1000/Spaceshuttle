@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { useTheme, makeStyles, Theme } from "@material-ui/core";
-import { Container, Grid, Card, TextField, Button } from "@material-ui/core";
+import {
+  Container,
+  Grid,
+  Card,
+  TextField,
+  Button,
+  Link,
+} from "@material-ui/core";
+import { auth } from "../firebase/firebase";
 
 const useStyles = (theme) => {
   return makeStyles({
@@ -18,31 +26,33 @@ const useStyles = (theme) => {
   });
 };
 
+const handleSubmit = async (email, password) => {
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+    history.push("/");
+  } catch (error) {
+    console.log(error.code);
+    switch (error.code) {
+      case "auth/invalid-email":
+        alert("メールアドレスの形式が間違っています。");
+        break;
+      case "auth/user-not-found":
+        alert("メールアドレスもしくはパスワードが間違っています。");
+        break;
+      case "auth/wrong-password":
+        alert("メールアドレスもしくはパスワードが間違っています。");
+        break;
+    }
+  }
+};
+
 const Signin = () => {
   const theme = useTheme();
   const styles = useStyles(theme)();
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [helperName, setHelperName] = useState("");
+  const [helperEmail, setHelperEmail] = useState("");
   const [helperPassword, setHelperPassword] = useState("");
-  const [sendFlag, setSendFlag] = useState(false);
-
-  let isValid = () => {
-    return /^[0-9a-zA-Z]{0,6}$/.test(val);
-  };
-
-  let checkSend = () => {
-    if (name.length === 0) {
-      return false;
-    }
-    if (password.length === 0) {
-      return false;
-    }
-    if (isValid(password)) {
-      return true;
-    }
-    return false;
-  };
 
   return (
     <Container>
@@ -59,22 +69,17 @@ const Signin = () => {
           <Grid item xs={12}>
             <TextField
               className={styles.textField}
-              id="username"
-              label="UserName"
-              value={name}
-              placeholder="UserName"
-              helperText={helperName}
-              autoComplete="username"
-              InputProps={{ name: "username" }}
+              id="email"
+              label="Email"
+              value={email}
+              placeholder="Email"
+              helperText={helperEmail}
+              autoComplete="email"
+              InputProps={{ email: "email" }}
               onChange={(e) => {
-                const currentName = e.target.value;
-                if (isValid(currentName)) {
-                  setName(currentName);
-                  setHelperName("");
-                } else {
-                  setHelperName("invalid Name");
-                }
-                setSendFlag(!checkSend(currentName, password));
+                const currentEmail = e.target.value;
+                setEmail(currentEmail);
+                setHelperEmail("");
               }}
             ></TextField>
           </Grid>
@@ -90,23 +95,29 @@ const Signin = () => {
               autoComplete="current-password"
               onChange={(e) => {
                 const currentPassword = e.target.value;
-                if (isValid(currentPassword)) {
-                  setPassword(currentPassword);
-                  setHelperPassword("");
-                } else {
-                  setHelperPassword("invalid Password");
-                }
-                setSendFlag(!checkSend(name, currentPassword));
+                setPassword(currentPassword);
+                setHelperPassword("");
               }}
             ></TextField>
           </Grid>
+          <Grid item xs>
+            <Link href="#" variant="body2">
+              メールアドレス・パスワードを忘れた方
+            </Link>
+          </Grid>
+          <Grid item xs={12}>
+            <Link href="#" variant="body2">
+              {"ユーザ登録へ"}
+            </Link>
+          </Grid>
           <Grid item xs={12}>
             <Button
+              type="button"
               variant="contained"
               color="primary"
               className={styles.button}
               size="large"
-              disabled={sendFlag}
+              onClick={() => handleSubmit(email, password)}
             >
               ログインする
             </Button>
