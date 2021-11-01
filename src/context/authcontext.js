@@ -10,9 +10,11 @@ export function useAuthContext() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const value = {
     user,
+    loading,
   };
 
   useEffect(() => {
@@ -21,6 +23,7 @@ export function AuthProvider({ children }) {
     const unsubscribed = auth.onAuthStateChanged((user) => {
       setUser(user);
       // ログインユーザ名をstateに
+      setLoading(false);
     });
     return () => {
       // ログアウト時
@@ -28,5 +31,9 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 }
