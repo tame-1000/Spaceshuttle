@@ -2,19 +2,22 @@
 
 映画×共有をテーマにしたReactアプリ
 
-# Requirement
+# 準備
 
-* Node.js
+Node.js v.14.17.5
 
-# Installation
-
-# Usage
-
-# Author
+# インストール
+```
+npm install  
+```
+# 使用法
+```
+npm start
+```
+# 作成者
 
 作成情報を列挙する
 
 * Yuma Adachi
 * 2021/10/27
 
-# License
