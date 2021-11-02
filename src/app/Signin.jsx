@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useTheme, makeStyles, Theme, Avatar } from "@material-ui/core";
 import { createTheme, ThemeProvider } from "@material-ui/styles";
 import {
@@ -8,14 +8,12 @@ import {
   Card,
   TextField,
   Button,
-  Link,
   Paper,
   Box,
   Typography,
   CardMedia,
 } from "@material-ui/core";
 
-import Image from "material-ui-image";
 import ImageSrc from "../img/seats.jpg";
 
 import { auth } from "../firebase/firebase";
@@ -138,12 +136,12 @@ const Signin = () => {
                 */}
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link to="#" variant="body2" style={{textDecoration: "none"}}>
                     パスワードをお忘れですか？
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link to="/register" variant="body2" style={{textDecoration: "none"}}>
                     {"ユーザ登録へ"}
                   </Link>
                 </Grid>

@@ -1,5 +1,11 @@
 import React from "react";
 
-const Register = () => {};
+const Register = () => {
+    return (
+        <>
+          ユーザ登録画面
+        </>
+    )
+};
 
 export default Register;
