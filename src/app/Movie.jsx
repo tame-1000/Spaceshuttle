@@ -4,7 +4,7 @@ import { Button, Container } from "@material-ui/core";
 
 const Movie = () => {
   return (
-    <Container alignItems="center" justify="center" spacing={4}>
+    <Container justify="center" spacing={4}>
       <h1>映画見る画面</h1>
       <Link to="/" style={{ textDecoration: "none" }}>
         <Button variant="outlined">トップページに戻る</Button>
