@@ -13,7 +13,16 @@ import {
   Box,
   Typography,
   CardMedia,
+  CardActionArea,
+  CardContent,
 } from "@material-ui/core";
+
+import PersonIcon from "@material-ui/icons/Person";
+import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
+import AddIcon from "@material-ui/icons/Add";
+
+import MovieCard from "../component/MovieCard";
+import ImageSrc from "../img/seats.jpg";
 
 const useStyles = (theme) => {
   return makeStyles({
@@ -25,8 +34,8 @@ const useStyles = (theme) => {
       width: "90%",
       height: 100,
     },
-    button: {
-      width: "100%",
+    personIcon: {
+      marginTop: "1em",
     },
   });
 };
@@ -37,69 +46,76 @@ const Top = () => {
   const theme = useTheme();
   const styles = useStyles(theme)();
 
+  const list = [
+    ["title1", "説明1", ImageSrc, 3],
+    ["title2", "説明2", ImageSrc, 2],
+    ["title3", "説明3", ImageSrc, 0],
+    ["title4", "説明4", ImageSrc, 8],
+    ["title5", "説明5", ImageSrc, 14],
+  ];
+
   if (!user) {
     return <Redirect to="/signin" />;
   } else {
     return (
-      <>
-        <Grid container justifyContent="space-around" className={styles.container} >
-        <Grid item xs={12} md={3} component={Paper} square>
-          <Link to="/moviesetting" style={{ textDecoration: "none" }}>
-            <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-              <Button variant="contained" color="primary">
-                部屋を作る
-              </Button>
-            </Box>
-        </Link>
+      <Container>
+        <Grid container spacing={5}>
+          {list.map((content, index) => (
+            <MovieCard
+              title={content[0]}
+              desc={content[1]}
+              img={content[2]}
+              num={content[3]}
+              index={index}
+            ></MovieCard>
+          ))}
         </Grid>
-            
-        <Grid item xs={12} md={3} component={Paper} square>
-          <Link to="/movie" style={{ textDecoration: "none" }}>
-            <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-              <Button variant="contained" color="primary">
-                映画を見る
-              </Button>
-            </Box>
-          </Link>
-        </Grid>
-            
-        <Grid item xs={12} md={3} component={Paper} square>
-          <Link to="/profile" style={{ textDecoration: "none" }}>
-            <Box
-              sx={{
-                my: 8,
-                mx: 4,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="outlined" color="primary">
-                プロフィール
-              </Button>
-            </Box>
-          </Link>
-        </Grid>
-      </Grid>
-      </>
+      </Container>
     );
   }
 };
 
 export default Top;
+
+/*
+            <Grid item xs={4} key={index}>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={content[2]}
+                    alt="green iguana"
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {content[0]}
+                    </Typography>
+                    <Typography variant="body2">{content[1]}</Typography>
+                    {content[3] ? (
+                      content[3] > 10 ? (
+                        [...Array(10)].map((num, iconIndex) => (
+                          <PersonIcon
+                            className={styles.personIcon}
+                            key={index + iconIndex}
+                          ></PersonIcon>
+                        ))
+                      ) : (
+                        [...Array(content[3])].map((num, iconIndex) => (
+                          <PersonIcon
+                            className={styles.personIcon}
+                            key={index + iconIndex}
+                          ></PersonIcon>
+                        ))
+                      )
+                    ) : (
+                      <PersonOutlineIcon
+                        className={styles.personIcon}
+                        key={index + "0"}
+                      ></PersonOutlineIcon>
+                    )}
+                    {content[3] > 10 && <AddIcon></AddIcon>}
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>*/
