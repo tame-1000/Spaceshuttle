@@ -11,3 +11,6 @@ public/index.html
 
 # nodenv
 .node-version
+
+# prettier
+.prettierrc
