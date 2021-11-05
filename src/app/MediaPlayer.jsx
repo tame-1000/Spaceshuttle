@@ -1,28 +1,29 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from "react";
 
 export const MediaPlayer = ({ videoTrack, audioTrack }) => {
-  const container = useRef(null)
+  const container = useRef(null);
   useEffect(() => {
-    if (!container.current) return
-    videoTrack?.play(container.current)
+    if (!container.current) return;
+    videoTrack?.play(container.current);
     return () => {
-      videoTrack?.stop()
-    }
-  }, [container, videoTrack])
+      videoTrack?.stop();
+    };
+  }, [container, videoTrack]);
   useEffect(() => {
     if (audioTrack) {
-      audioTrack.play()
+      audioTrack.play();
     }
     return () => {
-      audioTrack?.stop()
-    }
-  }, [audioTrack])
+      audioTrack?.stop();
+    };
+  }, [audioTrack]);
 
+  // コンテナのサイズはwidth:heightは4:3になるようにする
   return (
     <div
       ref={container}
       className="video-player"
-      style={{ width: '320px', height: '240px' }}
+      style={{ width: "80px", height: "60px" }}
     ></div>
-  )
-}
+  );
+};
