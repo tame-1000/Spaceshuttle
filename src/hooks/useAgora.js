@@ -17,7 +17,7 @@ export const useAgora = (client) => {
     return [microphoneTrack, cameraTrack];
   }
 
-  async function join(appID, channel, token, uid) {
+  async function join(appID, channel, token) {
     if (!client) return;
     const [microphoneTrack, cameraTrack] = await createLocalTracks();
 

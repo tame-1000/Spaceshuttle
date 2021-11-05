@@ -17,3 +17,6 @@ public/index.html
 
 # memo
 memo.md
+
+# Environment variables
+.env
