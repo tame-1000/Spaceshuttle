@@ -14,16 +14,18 @@ const Movie = () => {
     joinState,
     remoteUsers,
   } = useAgora(client);
+
+  const theme = useTheme();
   
   return (
     <ThemeProvider theme={theme}>
       <Grid container>
         {remoteUsers.map(user => (
-          <Grid item xs={2}>
-            {/* <MediaPlayer
+          <Grid item>
+            <MediaPlayer
               videoTrack={user.videoTrack}
               audioTrack={user.audioTrack}
-            ></MediaPlayer> */}
+            ></MediaPlayer>
           </Grid>
         ))}
       </Grid>
