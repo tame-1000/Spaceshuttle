@@ -5,8 +5,13 @@ import { ThemeProvider,useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
 import { useSkyway } from "../hooks/useSkyway";
 import { RemoteVideo } from "./RemoteVideo";
+import { MediaPlayer } from "./MediaPlayer";
+import { VideoPlayer } from "./VideoPlayer";
 
 const Movie = () => {
+
+  // roomIdはpropsとして受け取るように実装する
+  const roomId = "test"
 
   const peer = useRef(new Peer({ 
     key: process.env.SKYWAY_KEY,
@@ -96,7 +101,7 @@ const Movie = () => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <RemoteVideo video={video} key={video.peerId} />;
+      return <VideoPlayer video={video} key={video.peerId} />;
     });
   };
 
