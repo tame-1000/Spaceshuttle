@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useAuthContext } from "../context/authcontext";
 import { useTheme, makeStyles, Theme, Avatar } from "@material-ui/core";
@@ -37,6 +37,8 @@ const Profile = () => {
     const { user } = useAuthContext();
     const theme = useTheme();
     const styles = useStyles(theme)();
+
+    const [avatar, setAvatar] = useState(0);
     
     return (
     <Container >
@@ -47,32 +49,32 @@ const Profile = () => {
                 アバターアイコン一覧
               </Grid>
               <Grid item xs={4}>
-                <Avatar>
+                <Avatar onClick={(e) => {setAvatar(0)}}>
                     1
                 </Avatar>
               </Grid>
-              <Grid item xs={4}>
-                <Avatar>
+              <Grid item xs={4} >
+                <Avatar onClick={(e) => {setAvatar(1)}}>
                     2
                 </Avatar>
               </Grid>
               <Grid item xs={4}>
-                <Avatar>
+                <Avatar onClick={(e) => {setAvatar(2)}}>
                     3
                 </Avatar>
               </Grid>
               <Grid item xs={4}>
-                <Avatar>
+                <Avatar onClick={(e) => {setAvatar(3)}}>
                     4
                 </Avatar>
               </Grid>
               <Grid item xs={4}>
-                <Avatar>
+                <Avatar onClick={(e) => {setAvatar(4)}}>
                     5
                 </Avatar>
               </Grid>
               <Grid item xs={4}>
-                <Avatar>
+                <Avatar onClick={(e) => {setAvatar(5)}}>
                     6
                 </Avatar>
               </Grid>
@@ -81,7 +83,7 @@ const Profile = () => {
         <Grid item xs={5}>
           <Grid container spacing={3}>
               <Grid item xs={12}>
-                アバター全体図
+                アバター全体図{avatar}
               </Grid>
               <Grid item xs={12}>
                 アバター全身？画像
