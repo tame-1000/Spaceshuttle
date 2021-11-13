@@ -1,7 +1,7 @@
 import { Grid, makeStyles } from "@material-ui/core";
 import React, { useEffect, useRef } from "react";
 
-export const VideoPlayer = ({ video }) => {
+export const AvatarPlayer = ({ video }) => {
   const useStyles = makeStyles(() => ({
     video: {
       width: "80vh",

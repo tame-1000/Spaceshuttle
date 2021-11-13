@@ -3,11 +3,8 @@ import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
 import { ThemeProvider,useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
-import { useSkyway } from "../hooks/useSkyway";
-import { RemoteVideo } from "./RemoteVideo";
-import { MediaPlayer } from "./MediaPlayer";
-import { VideoPlayer } from "./VideoPlayer";
 import { MovieModal } from "./MovieModal";
+import { AvatarPlayer } from "./AvatarPlayer";
 
 const Movie = () => {
   const useStyles = makeStyles(() => ({
@@ -109,7 +106,7 @@ const Movie = () => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <VideoPlayer video={video} key={video.peerId} />;
+      return <AvatarPlayer video={video} key={video.peerId} />;
     });
   };
 
@@ -117,7 +114,7 @@ const Movie = () => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <VideoPlayer video={ {stream: localStream, peerId: "local-stream"} }></VideoPlayer>
+        <AvatarPlayer video={ {stream: localStream, peerId: "local-stream"} }></AvatarPlayer>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
