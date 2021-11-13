@@ -1,49 +1,127 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
-import { Box, Button, Container, Grid } from "@material-ui/core";
-import { useAgora } from "../hooks/useAgora";
-import AgoraRTC from "agora-rtc-sdk-ng";
+import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
 import { ThemeProvider,useTheme } from "@material-ui/styles";
+import Peer from "skyway-js";
+import { useSkyway } from "../hooks/useSkyway";
+import { RemoteVideo } from "./RemoteVideo";
 import { MediaPlayer } from "./MediaPlayer";
-
-const client = AgoraRTC.createClient({ codec: 'h264', mode: 'rtc' });
+import { VideoPlayer } from "./VideoPlayer";
+import { MovieModal } from "./MovieModal";
 
 const Movie = () => {
-  const appID = process.env.APP_ID;
-  const channel = process.env.CHANNEL;
-  const token = process.env.TOKEN;
-  // const [appID, setAppID] = useState("");
-  // const [token, setToken] = useState("");
-  // const [channel, setChannel] = useState("");
+  const useStyles = makeStyles(() => ({
+    // container: {
+    //   width: "100%",
+    // },
+  }));
 
-  const {
-    localAudioTrack,
-    localVideoTrack,
-    joinState,
-    leave,
-    join,
-    remoteUsers,
-  } = useAgora(client)
+  const classes = useStyles();
+
+  // roomIdはpropsとして受け取るように実装する
+  const roomId = "test"
+
+  const peer = useRef(new Peer({ 
+    key: process.env.SKYWAY_KEY,
+    debug:3,
+   }));
+
+  const roomMode = "sfu";
+
+  const [remoteVideo, setRemoteVideo] = useState([]);
+  const [localStream, setLocalStream] = useState();
+  const [room, setRoom] = useState();
+  const localVideoRef = useRef(null);
 
   useEffect(() => {
-    join(appID, channel,token);
-
-    return () => {
-      leave();
-    };
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((stream) => {
+        setLocalStream(stream);
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+          localVideoRef.current.play().catch((e) => console.log(e));
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
+  const onJoin = () => {
+    if (peer.current) {
+      // シグナリングサーバに接続できていない場合
+      if (!peer.current.open) {
+        return;
+      }
+
+      // Roomにjoinする
+      const tmpRoom = peer.current.joinRoom(roomId, {
+        mode: roomMode,
+        stream: localStream,
+      });
+
+      // ルームに参加した時
+      tmpRoom.once("open", () => {
+        console.log("=== You joined ===\n");
+      });
+
+      // 他のユーザがRoomにjoinしてきた時
+      tmpRoom.on("peerJoin", (peerId) => {
+        console.log(`=== ${peerId} joined ===\n`);
+      });
+
+      // Room に Join している他のユーザのストリームを受信した時
+      tmpRoom.on("stream", async (stream) => {
+        setRemoteVideo([
+          ...remoteVideo,
+          { stream: stream, peerId: stream.peerId },
+        ]);
+      });
+
+      // 他のユーザがroomを退出した時
+      tmpRoom.on("peerLeave", (peerId) => {
+        setRemoteVideo(
+          remoteVideo.filter((video) => {
+            if (video.peerId === peerId) {
+              video.stream.getTracks().forEach((track) => track.stop());
+            }
+            return video.peerId !== peerId;
+          })
+        );
+        console.log(`=== ${peerId} left ===\n`);
+      });
+
+      setRoom(tmpRoom);
+    }
+  };
+  const onLeave = () => {
+    if (room) {
+      room.close();
+      setRemoteVideo((prev) => {
+        return prev.filter((video) => {
+          video.stream.getTracks().forEach((track) => track.stop());
+          return false;
+        });
+      });
+    }
+  };
+
+  const castVideo = () => {
+    return remoteVideo.map((video) => {
+      return <VideoPlayer video={video} key={video.peerId} />;
+    });
+  };
+
   return (
+    <Container>
+      <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        {remoteUsers.map((user) => (
-          <Grid item>
-            <MediaPlayer
-              videoTrack={user.videoTrack}
-              audioTrack={user.audioTrack}
-            ></MediaPlayer>
-          </Grid>
-        ))}
+        <VideoPlayer video={ {stream: localStream, peerId: "local-stream"} }></VideoPlayer>
+        {castVideo()}
       </Grid>
+      <MovieModal onJoin={onJoin}></MovieModal>
+    </Container>
     // <Container justify="center" spacing={4}>
     //   <h1>映画見る画面</h1>
     //   <Link to="/" style={{ textDecoration: "none" }}>

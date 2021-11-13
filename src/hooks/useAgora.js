@@ -1,86 +1,80 @@
-import { useState, useEffect } from "react";
-import AgoraRTC from "agora-rtc-sdk-ng";
+import { Grid } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { Audience } from "./Audience";
 
-export const useAgora = (client) => {
-  const [localVideoTrack, setLocalVideoTrack] = useState(undefined);
-  const [localAudioTrack, setLocalAudioTrack] = useState(undefined);
+window.roomMode = "sfu";
 
-  const [joinState, setJoinState] = useState(false);
+export const useAgora = ({ peer, roomId }) => {
+  //   const audiences = useRef(null);
+  const [children, setChildren] = useState({});
+  const room = null;
 
-  const [remoteUsers, setRemoteUsers] = useState([]);
+  useEffect(async () => {
+    const localStream = getLocalStream();
 
-  async function createLocalTracks(audioConfig, videoConfig) {
-    const [microphoneTrack, cameraTrack] =
-      await AgoraRTC.createMicrophoneAndCameraTracks(audioConfig, videoConfig);
-    setLocalAudioTrack(microphoneTrack);
-    setLocalVideoTrack(cameraTrack);
-    return [microphoneTrack, cameraTrack];
-  }
+    // Render local stream
+    setChildren(
+      (children[stream.peerId] = (
+        <Audience mediaStream={localStream}></Audience>
+      ))
+    );
 
-  async function join(appID, channel, token) {
-    if (!client) return;
-    const [microphoneTrack, cameraTrack] = await createLocalTracks();
-
-    await client.join(appID, channel, token);
-    await client.publish([microphoneTrack, cameraTrack]);
-
-    window.client = client;
-    window.videoTrack = cameraTrack;
-
-    setJoinState(true);
-  }
-
-  async function leave() {
-    if (localAudioTrack) {
-      localAudioTrack.stop();
-      localAudioTrack.close();
+    if (!peer.open) {
+      console.log("peer is closed.");
+      return;
     }
-    if (localVideoTrack) {
-      localVideoTrack.stop();
-      localVideoTrack.close();
-    }
-    setRemoteUsers([]);
-    setJoinState(false);
-    await client?.leave();
-  }
 
-  useEffect(() => {
-    if (!client) return;
-    setRemoteUsers(client.remoteUsers);
+    const room = peer.joinRoom(roomId, {
+      mode: roomMode,
+      stream: localStream,
+    });
 
-    const handleUserPublished = async (user, mediaType) => {
-      await client.subscribe(user, mediaType);
-      // toggle rerender while state of remoteUsers changed.
-      setRemoteUsers((remoteUsers) => Array.from(client.remoteUsers));
-    };
-    const handleUserUnpublished = (user) => {
-      setRemoteUsers((remoteUsers) => Array.from(client.remoteUsers));
-    };
-    const handleUserJoined = (user) => {
-      setRemoteUsers((remoteUsers) => Array.from(client.remoteUsers));
-    };
-    const handleUserLeft = (user) => {
-      setRemoteUsers((remoteUsers) => Array.from(client.remoteUsers));
-    };
-    client.on("user-published", handleUserPublished);
-    client.on("user-unpublished", handleUserUnpublished);
-    client.on("user-joined", handleUserJoined);
-    client.on("user-left", handleUserLeft);
+    room.once("open", () => {
+      console.log("=== You joined ===\n");
+    });
+    room.on("peerJoin", (peerId) => {
+      console.log(`=== ${peerId} joined ===\n`);
+    });
 
-    return () => {
-      client.off("user-published", handleUserPublished);
-      client.off("user-unpublished", handleUserUnpublished);
-      client.off("user-joined", handleUserJoined);
-      client.off("user-left", handleUserLeft);
-    };
-  }, [client]);
+    // Render remote stream for new peer join in the room
+    room.on("stream", async (stream) => {
+      setChildren(
+        (children[stream.peerId] = <Audience mediaStream={stream}></Audience>)
+      );
+    });
 
-  return {
-    localAudioTrack,
-    localVideoTrack,
-    joinState,
-    leave,
-    join,
-    remoteUsers,
+    // for closing room members
+    room.on("peerLeave", (peerId) => {
+      delete children[peerId];
+
+      console.log(`=== ${peerId} left ===\n`);
+    });
+
+    // for closing myself
+    room.once("close", () => {
+      console.log("== You left ===\n");
+
+      for (key in children) {
+        delete children[key];
+      }
+    });
+  }, []);
+
+  const getLocalStream = async () => {
+    const localStream = await navigator.mediaDevices
+      .getUserMedia({
+        audio: true,
+        video: true,
+      })
+      .catch(console.error);
+
+    return localStream;
   };
+
+  const audiences = [];
+  for (key in children) {
+    audiences.push(children[key]);
+  }
+
+  return { audiences, room };
 };
