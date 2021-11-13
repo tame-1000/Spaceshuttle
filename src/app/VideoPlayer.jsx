@@ -1,7 +1,17 @@
+import { Grid, makeStyles } from "@material-ui/core";
 import React, { useEffect, useRef } from "react";
 
 export const VideoPlayer = ({ video }) => {
-  const videoRef = useRef(null);
+    const useStyles = makeStyles(() => ({
+        video: {
+            width: "80vh",
+            height: "auto",
+        }
+      }));
+    
+    const classes = useStyles();  
+  
+    const videoRef = useRef(null);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -10,5 +20,9 @@ export const VideoPlayer = ({ video }) => {
     }
   }, [video]);
 
-  return <video ref={videoRef} playsInline autoPlay></video>;
+  return (
+    <Grid item xs={2}>
+      <video className={classes.video} ref={videoRef} playsInline autoPlay></video>
+    </Grid>
+  );
 };

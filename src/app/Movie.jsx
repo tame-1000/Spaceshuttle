@@ -1,14 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
-import { Box, Button, Container, Grid } from "@material-ui/core";
+import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
 import { ThemeProvider,useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
 import { useSkyway } from "../hooks/useSkyway";
 import { RemoteVideo } from "./RemoteVideo";
 import { MediaPlayer } from "./MediaPlayer";
 import { VideoPlayer } from "./VideoPlayer";
+import { MovieModal } from "./MovieModal";
 
 const Movie = () => {
+  const useStyles = makeStyles(() => ({
+    // container: {
+    //   width: "100%",
+    // },
+  }));
+
+  const classes = useStyles();
 
   // roomIdはpropsとして受け取るように実装する
   const roomId = "test"
@@ -40,7 +48,7 @@ const Movie = () => {
       });
   }, []);
 
-  const onStart = () => {
+  const onJoin = () => {
     if (peer.current) {
       // シグナリングサーバに接続できていない場合
       if (!peer.current.open) {
@@ -87,7 +95,7 @@ const Movie = () => {
       setRoom(tmpRoom);
     }
   };
-  const onEnd = () => {
+  const onLeave = () => {
     if (room) {
       room.close();
       setRemoteVideo((prev) => {
@@ -106,12 +114,14 @@ const Movie = () => {
   };
 
   return (
-    <div>
-      <button onClick={() => onStart()}>start</button>
-      <button onClick={() => onEnd()}>end</button>
-      <video ref={localVideoRef} playsInline></video>
-      {castVideo()}
-    </div>
+    <Container>
+      <Button onClick={() => onLeave()}>Leave</Button>
+      <Grid container>
+        <video ref={localVideoRef} playsInline></video>
+        {castVideo()}
+      </Grid>
+      <MovieModal onJoin={onJoin}></MovieModal>
+    </Container>
     // <Container justify="center" spacing={4}>
     //   <h1>映画見る画面</h1>
     //   <Link to="/" style={{ textDecoration: "none" }}>
