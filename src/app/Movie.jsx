@@ -117,7 +117,7 @@ const Movie = () => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <video ref={localVideoRef} playsInline></video>
+        <VideoPlayer video={ {stream: localStream, peerId: "local-stream"} }></VideoPlayer>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
