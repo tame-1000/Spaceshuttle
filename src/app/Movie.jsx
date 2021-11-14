@@ -70,22 +70,22 @@ const Movie = () => {
 
       // Room に Join している他のユーザのストリームを受信した時
       tmpRoom.on("stream", async (stream) => {
-        setRemoteVideo([
-          ...remoteVideo,
+        setRemoteVideo((prev) => [
+          ...prev,
           { stream: stream, peerId: stream.peerId },
         ]);
       });
 
       // 他のユーザがroomを退出した時
       tmpRoom.on("peerLeave", (peerId) => {
-        setRemoteVideo(
-          remoteVideo.filter((video) => {
+        setRemoteVideo((prev) => {
+          return prev.filter((video) => {
             if (video.peerId === peerId) {
               video.stream.getTracks().forEach((track) => track.stop());
             }
             return video.peerId !== peerId;
           })
-        );
+        });
         console.log(`=== ${peerId} left ===\n`);
       });
 
