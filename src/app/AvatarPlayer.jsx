@@ -21,7 +21,7 @@ export const AvatarPlayer = ({ video }) => {
   }, [video]);
 
   return (
-    <Grid item xs={2}>
+    <Grid item>
       <video
         className={classes.video}
         ref={videoRef}
