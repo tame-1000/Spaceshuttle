@@ -1,14 +1,13 @@
-import { ContactsOutlined } from "@material-ui/icons";
 import React from "react";
+import { Box } from "@material-ui/core";
 
 const AvatorBox = (props) => {
     const id = props.id;
+
     return (
-        <>
-            <div onClick={() => props.onClick(id)}>
-                <p>{id}</p>
-            </div>
-        </>
+        <Box onClick={() => props.onClick(id)}>
+            <p>{id}</p>
+        </Box>
     );
 }
 

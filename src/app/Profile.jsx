@@ -27,6 +27,9 @@ const useStyles = (theme) => {
       button: {
         width: "100%",
       },
+      borderBox: {
+        border: "1px",
+      }
     });
   };
 
@@ -39,7 +42,7 @@ const Profile = () => {
     const theme = useTheme();
     const styles = useStyles(theme);
 
-    const [avatar, setAvatar] = useState(1);
+    const [avatar, setAvatar] = useState("1");
 
     const list = [
       [1,"avator1"],
@@ -60,7 +63,7 @@ const Profile = () => {
           <Grid container spacing={3}>
               {list.map((content, index) => (
                 <Grid item xs={4} key={index}>
-                  <AvatarBox onClick={setAvatar} id={content[0]} name={content[1]}></AvatarBox>
+                  <AvatarBox onClick={setAvatar} className={content[0]==avatar && styles.borderBox} id={content[0]} name={content[1]}></AvatarBox>
                 </Grid>
               ))}
           </Grid>
