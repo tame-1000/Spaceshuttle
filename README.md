@@ -11,6 +11,11 @@ Node.js v.14.17.5
 npm install  
 ```
 # 使用法
+.envファイルを追加して，以下のようにSKYWAYのキーを記述する．
+```
+SKYWAY_KEY = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
+そして，以下のコマンドで実行する．
 ```
 npm start
 ```
