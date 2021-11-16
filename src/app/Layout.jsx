@@ -6,7 +6,6 @@ import Nav from "./Nav";
 
 const Layout = (props) => {
   const location = useLocation();
-  console.log(location);
   return (
     <>
       <Nav pathname={location.pathname}></Nav>
