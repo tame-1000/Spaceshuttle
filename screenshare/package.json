@@ -1,0 +1,33 @@
+{
+  "name": "skyway-screenshare",
+  "version": "1.0.1",
+  "description": "ScreenShare library for SkyWay",
+  "main": "dist/screenshare.js",
+  "module": "src/index.js",
+  "scripts": {
+    "lint": "eslint ./examples ./src ./chrome-extension",
+    "build:ext": "zip ./dist/screenshare_chrome_extension.zip ./chrome-extension/*",
+    "build:lib": "NODE_ENV=production webpack",
+    "dev:lib": "webpack -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skyway/skyway-screenshare.git"
+  },
+  "keywords": [],
+  "author": "NTT Communications Corp.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/skyway/skyway-screenshare/issues"
+  },
+  "homepage": "https://github.com/skyway/skyway-screenshare#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "eslint": "^4.4.1",
+    "eslint-config-google": "^0.9.1",
+    "webpack": "^3.5.5"
+  }
+}
