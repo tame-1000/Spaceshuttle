@@ -82,7 +82,10 @@ const Register = () => {
   // Firestoreにユーザーを追加する
   const createUserToFirestore = async (email) => {
     try {
-      await db.collection("users").add({ email: email, avatarid: 1 });
+      await db
+        .collection("users")
+        .doc(email)
+        .set({ email: email, avatarid: 1 });
     } catch (e) {
       console.log(e);
     }
