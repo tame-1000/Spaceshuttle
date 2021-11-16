@@ -8,3 +8,17 @@ public/index.html
 # IDE
 .alm
 .vscode
+
+# nodenv
+.node-version
+
+# prettier
+.prettierrc
+
+# memo
+memo.md
+
+# Environment variables
+.env
+
+public/

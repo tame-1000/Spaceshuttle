@@ -19,6 +19,7 @@
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
     "clean-webpack-plugin": "3.0.0",
+    "clmtrackr": "^1.1.2",
     "css-loader": "^6.5.0",
     "file-loader": "^6.2.0",
     "firebase": "^9.2.0",
@@ -28,6 +29,7 @@
     "react-dom": "16.11.0",
     "react-firebase-auth": "^1.0.3",
     "react-router-dom": "^5.3.0",
+    "skyway-js": "^4.4.2",
     "style-loader": "^3.3.1",
     "ts-loader": "6.2.1",
     "typescript": "3.7.2"
@@ -39,6 +41,8 @@
     "@types/react-router-dom": "^5.3.2",
     "babel-loader": "^8.2.3",
     "babel-plugin-react-html-attrs": "^3.0.5",
+    "dotenv-webpack": "^7.0.3",
+    "prettier": "2.4.1",
     "webpack": "^5.21.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.4.0"
