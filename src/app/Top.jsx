@@ -57,7 +57,6 @@ const Top = () => {
             li.push(doc.data());
           });
         });
-      console.log(li);
       setList(li);
     })();
   }, []);
