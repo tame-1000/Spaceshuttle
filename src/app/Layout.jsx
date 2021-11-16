@@ -6,11 +6,12 @@ import Nav from "./Nav";
 
 const Layout = (props) => {
   const location = useLocation();
+  console.log(location);
   return (
     <>
-      <Nav></Nav>
+      <Nav pathname={location.pathname}></Nav>
       <AuthProvider>
-        <div style={{ height: "90%" }}>{props.children}</div>
+        <div style={{ height: "100%" }}>{props.children}</div>
       </AuthProvider>
     </>
   );
