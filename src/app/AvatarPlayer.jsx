@@ -93,8 +93,7 @@ export const AvatarPlayer = ({ video }) => {
     video: {
       transform: "scaleX(-1)",
     },
-    canvas: {
-    },
+    canvas: {},
   }));
 
   const classes = useStyles();
@@ -118,11 +117,11 @@ export const AvatarPlayer = ({ video }) => {
     return afterSwappingPosition;
   };
 
-  const drawFacePosition=(ctx, p)=> {
-    for (let i=0;i<p.length;i++) {
-        ctx.fillText(i, p[i][0], p[i][1]);
+  const drawFacePosition = (ctx, p) => {
+    for (let i = 0; i < p.length; i++) {
+      ctx.fillText(i, p[i][0], p[i][1]);
     }
-  }
+  };
 
   useEffect(() => {
     if (videoRef.current && canvasRef.current) {
@@ -144,15 +143,15 @@ export const AvatarPlayer = ({ video }) => {
       function drawLoop() {
         // ここで毎フレームdrawLoopを呼び出すように設定する．
         requestAnimationFrame(drawLoop);
-        
+
         // 毎フレーム出力用のキャンバスをクリアする．これをしないと重ね書きのようになってしまう．
         cc.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
         const positionsFromCtracker = ctracker.getCurrentPosition();
-        const positions = swapPosition(positionsFromCtracker)
+        const positions = swapPosition(positionsFromCtracker);
 
-        if(positions!==false){
-          drawFacePosition(cc,positions)
+        if (positions !== false) {
+          drawFacePosition(cc, positions);
         }
         console.log(ctracker.getCurrentPosition());
       }
