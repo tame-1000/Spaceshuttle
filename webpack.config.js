@@ -54,6 +54,11 @@ module.exports = {
         loader: "file-loader",
         options: {},
       },
+      {
+        test: /.ts$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader'
+      },
     ],
   },
   devServer: {
