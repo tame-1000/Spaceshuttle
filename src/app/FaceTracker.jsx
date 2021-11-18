@@ -1,6 +1,7 @@
 import { Grid, makeStyles } from "@material-ui/core";
 import React, { useEffect, useRef } from "react";
 import clm from "clmtrackr";
+import { Live2DCanvas } from "./Live2DCanvas";
 
 /**
  * 顔座標のindex
@@ -88,7 +89,7 @@ const faceCoordinateIndexForMapping = [
   { from: 48, to: 46 },
 ];
 
-export const AvatarPlayer = ({ video }) => {
+export const FaceTracker = ({ video }) => {
   const useStyles = makeStyles(() => ({
     video: {
       transform: "scaleX(-1)",
@@ -181,6 +182,7 @@ export const AvatarPlayer = ({ video }) => {
         width={400}
         height={300}
       ></canvas>
+      {/* <Live2DCanvas></Live2DCanvas> */}
     </Grid>
   );
 };

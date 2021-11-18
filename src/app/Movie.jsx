@@ -4,7 +4,7 @@ import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
 import { ThemeProvider,useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
-import { AvatarPlayer } from "./AvatarPlayer";
+import { FaceTracker } from "./FaceTracker";
 
 const Movie = () => {
   const useStyles = makeStyles(() => ({
@@ -114,7 +114,7 @@ const Movie = () => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <AvatarPlayer video={ {stream: localStream, peerId: "local-stream"} }></AvatarPlayer>
+        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} }></FaceTracker>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
