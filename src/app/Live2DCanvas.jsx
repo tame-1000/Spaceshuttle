@@ -1,9 +1,38 @@
 import React from "react";
-import { Live2DCubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
+import { CubismFramework, Option } from "../cubismSDK/Framework/src/live2dcubismframework";
+
+const resourcesPath="../../public/resources"
+const modelDir = ['Haru', 'Hiyori', 'Mark', 'Natori', 'Rice']; 
 
 export const Live2DCanvas=()=>{
-    Live2DCubismFramework.CubismFramework.startUp();
+    let cubismOption = new Option();
+
+    // prepare for Cubism Framework API.
+    cubismOption.logFunction = LappPal
+    cubismOption.loggingLevel = LogLevel.LogLevel_Info;
+    CubismFramework.startUp(cubismOption);
+
+    // initialize cubism
+    CubismFramework.initialize();
     
+    // const dir: string = "example/";
+    // const fileName: string = "example.model3.json";
+    // const path: string = dir + fileName;
+     
+    // fetch(path).then(
+    //     (response) =>
+    //     {
+    //         return response.arrayBuffer();
+    //     }
+    // ).then(
+    //     (arrayBuffer) =>
+    //     {
+    //         let buffer: ArrayBuffer = arrayBuffer;
+    //         let size = buffer.byteLength;
+    //         let setting: ICubismModelSetting = new CubismModelSettingJson(buffer, size);
+    //         deleteBuffer(buffer, path);
+    // // 省略
+    //     }
     return (
         <canvas></canvas>
     )
