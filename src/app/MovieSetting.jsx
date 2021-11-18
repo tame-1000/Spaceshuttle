@@ -8,7 +8,10 @@ import db from "../firebase/firebase";
 import Peer from "skyway-js";
 
 const MovieSetting = () => {
-  const peer = new Peer({ key: process.env.SKYWAY_KEY, debug: 3 });
+  const peer = new Peer({
+    key: "748c1040-b86c-4a42-875a-80125e8d3691",
+    debug: 3,
+  });
   const [groupname, setGroupname] = useState("みんなの部屋");
 
   useEffect(() => {
@@ -19,6 +22,7 @@ const MovieSetting = () => {
   }, []);
 
   const handleSubmit = async (groupname) => {
+    console.log(peer.id, groupname);
     try {
       await db
         .collection("room")
