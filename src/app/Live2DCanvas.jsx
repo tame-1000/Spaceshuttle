@@ -1,13 +1,8 @@
 import React from "react";
+import { Live2DCubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
 
 export const Live2DCanvas=()=>{
-    // TypeScript
-    let cubismOption = null;
-
-    // prepare for Cubism Framework API.
-    cubismOption.logFunction = LAppPal.printMessage;
-    cubismOption.loggingLevel = LogLevel.LogLevel_Info;
-    CubismFramework.startUp(cubismOption);
+    Live2DCubismFramework.CubismFramework.startUp();
     
     return (
         <canvas></canvas>

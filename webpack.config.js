@@ -21,6 +21,9 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, "node_modules")],
     extensions: [".ts", ".tsx", ".js", ".jsx"],
+    alias: {
+      '@framework': path.resolve(__dirname, './src/cubismSDK/Framework/src')
+    }
   },
   module: {
     rules: [
@@ -55,7 +58,7 @@ module.exports = {
         options: {},
       },
       {
-        test: /.ts$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
         loader: 'ts-loader'
       }

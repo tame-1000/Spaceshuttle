@@ -22,3 +22,6 @@ memo.md
 .env
 
 public/
+
+# dist
+src/cubismSDK/Framework/dist/
