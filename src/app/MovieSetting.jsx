@@ -22,7 +22,8 @@ const MovieSetting = () => {
     try {
       await db
         .collection("room")
-        .add({ peerid: peer.id, groupname: groupname });
+        .doc(peer.id)
+        .set({ peerid: peer.id, groupname: groupname });
     } catch (e) {
       console.log(e);
     }
