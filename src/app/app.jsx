@@ -14,17 +14,6 @@ import Profile from "./Profile";
 import Register from "./Register"
 
 const root = document.getElementById("root");
-
-const coreSource = document.createElement("source");
-source.src = "../cubismSDK/Core/live2dcubismcore.js";
-source.type = "module";
-document.body.appendChild(coreSource);
-
-const demoSource = document.createElement("source");
-source.src = "../cubismSDK/Demo/dist/bundle.js";
-source.type = "module";
-document.body.appendChild(demoSource);
-
 ReactDOM.render(
   <Router>
     <Layout>
@@ -36,7 +25,5 @@ ReactDOM.render(
       <Route exact path="/register" component={Register}></Route>
     </Layout>
   </Router>,
-  {root},
-  {coreSource},
-  {demoSource}
+  root
 );
