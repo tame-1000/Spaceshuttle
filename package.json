@@ -22,17 +22,20 @@
     "clmtrackr": "^1.1.2",
     "css-loader": "^6.5.0",
     "file-loader": "^6.2.0",
-    "firebase": "^9.2.0",
+    "firebase": "^9.4.1",
+    "formik": "^2.2.9",
     "html-webpack-plugin": "5.5.0",
     "material-ui-image": "^3.3.2",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-firebase-auth": "^1.0.3",
     "react-router-dom": "^5.3.0",
+    "reactstrap": "^9.0.1",
     "skyway-js": "^4.4.2",
     "style-loader": "^3.3.1",
     "ts-loader": "6.2.1",
-    "typescript": "3.7.2"
+    "typescript": "3.7.2",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

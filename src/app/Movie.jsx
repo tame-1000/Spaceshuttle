@@ -125,11 +125,6 @@ const Movie = () => {
     // Prepare screen share object
     const ss = ScreenShare.create({debug: true});
 
-    // Get peer id from server
-    peer.on('open', () => {
-      $('#my-id').text(peer.id);
-    });
-
     // Set your own stream and answer if you get a call
     peer.on('call', call => {
       call.answer(localStream);
@@ -237,11 +232,9 @@ const Movie = () => {
       <p><a href="#" id="start-screen">Set Screen</a></p>
 
       <div id="group-container">
-          <p>My peer id: <span id="my-id">...</span></p>
-          
-          <label for="otherpeerid">Recipient peer id:</label>
-          <input id="otherpeerid"/>
-          <a href="#" id="connect">Connect</a>
+        <label for="otherpeerid">Recipient peer id:</label>
+        <input id="otherpeerid"/>
+        <a href="#" id="connect">Connect</a>
       </div>
 
       <div id="end-container">
