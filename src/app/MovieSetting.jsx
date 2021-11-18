@@ -4,7 +4,7 @@ import { Box, TextField, Button, Container } from "@material-ui/core";
 //import { Form, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 //import { Formik } from 'formik';
 //import * as Yup from 'yup';
-import db from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 import Peer from "skyway-js";
 
 const MovieSetting = () => {
