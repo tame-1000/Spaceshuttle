@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { CubismFramework, Option } from "../cubismSDK/Framework/src/live2dcubismframework";
+import { CubismFramework, LogLevel, Option } from "../cubismSDK/Framework/src/live2dcubismframework";
 import { LAppPal } from "../cubismSDK/Demo/src/lapppal";
 
 const resourcesPath = "../../public/resources";
@@ -9,7 +9,7 @@ export const Live2DCanvas=()=>{
     let cubismOption = new Option();
 
     // prepare for Cubism Framework API.
-    cubismOption.logFunction = LAppPal.printMessage
+    cubismOption.logFunction = LAppPal.printMessage;
     cubismOption.loggingLevel = LogLevel.LogLevel_Info;
     CubismFramework.startUp(cubismOption);
 
