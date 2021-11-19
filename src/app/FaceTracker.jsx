@@ -182,7 +182,7 @@ export const FaceTracker = ({ video }) => {
         width={400}
         height={300}
       ></canvas>
-      {/* <Live2DCanvas></Live2DCanvas> */}
+      <Live2DCanvas></Live2DCanvas>
     </Grid>
   );
 };
