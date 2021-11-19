@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
-import { ThemeProvider,useTheme } from "@material-ui/styles";
+import { ThemeProvider, useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
 import { AvatarPlayer } from "./AvatarPlayer";
 
-const Movie = () => {
+const Movie = (props) => {
+  // roomidを取得
+  const roomId = props.match.params.roomid;
+
   const useStyles = makeStyles(() => ({
     // container: {
     //   width: "100%",
@@ -16,12 +19,14 @@ const Movie = () => {
   const classes = useStyles();
 
   // roomIdはpropsとして受け取るように実装する
-  const roomId = "test"
+  // const roomId = "test";
 
-  const peer = useRef(new Peer({ 
-    key: process.env.SKYWAY_KEY,
-    debug:3,
-   }));
+  const peer = useRef(
+    new Peer({
+      key: process.env.SKYWAY_KEY,
+      debug: 3,
+    })
+  );
 
   const roomMode = "sfu";
 
@@ -84,7 +89,7 @@ const Movie = () => {
               video.stream.getTracks().forEach((track) => track.stop());
             }
             return video.peerId !== peerId;
-          })
+          });
         });
         console.log(`=== ${peerId} left ===\n`);
       });
@@ -114,7 +119,9 @@ const Movie = () => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <AvatarPlayer video={ {stream: localStream, peerId: "local-stream"} }></AvatarPlayer>
+        <AvatarPlayer
+          video={{ stream: localStream, peerId: "local-stream" }}
+        ></AvatarPlayer>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>

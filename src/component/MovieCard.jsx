@@ -19,8 +19,6 @@ import PersonIcon from "@material-ui/icons/Person";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import AddIcon from "@material-ui/icons/Add";
 
-import ImageSrc from "../img/seats.jpg";
-
 const useStyles = (theme) => {
   return makeStyles({
     personIcon: {
@@ -31,11 +29,17 @@ const useStyles = (theme) => {
 
 const MovieCard = (props) => {
   const theme = useTheme();
-  const styles = useStyles(theme)();
+  const styles = useStyles(theme);
+
+  // 個別ページに飛ぶ関数（props.onClickを実行）
+  const onClick = (id) => {
+    props.onClick(id);
+  };
 
   return (
     <Grid item xs={4} key={props.index}>
-      <Card sx={{ maxWidth: 345 }}>
+      {/* クリックしたら、個別動画ページに飛ぶように */}
+      <Card sx={{ maxWidth: 345 }} onClick={() => onClick(props.roomid)}>
         <CardActionArea>
           <CardMedia
             component="img"
