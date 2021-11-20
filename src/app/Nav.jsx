@@ -46,8 +46,6 @@ const Nav = (props) => {
     history.push("/signin");
   };
 
-  console.log(props.pathname);
-
   if (props.pathname !== "/signin" && props.pathname !== "/register") {
     return (
       <div style={{ height: "10%" }}>

@@ -83,8 +83,6 @@ const Top = () => {
     history.push(`/movie/${roomid}`);
   };
 
-  console.log(user.email);
-
   if (!user) {
     // ログインしていないときはサインインページに
     return <Redirect to="/signin" />;
