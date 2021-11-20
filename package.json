@@ -9,42 +9,47 @@
   "scripts": {
     "clean": "rm -rf ./node_modules package-lock.json && npm i",
     "upgrade": "npm install typescript@latest react@latest react-dom@latest @types/react@latest @types/react-dom@latest webpack@latest webpack-dev-server@latest webpack-cli@latest ts-loader@latest clean-webpack-plugin@latest html-webpack-plugin@latest --save-exact",
-    "build": "webpack --watch",
+    "build": "webpack",
     "start": "webpack-dev-server --open --history-api-fallback"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.16.0",
+    "@babel/plugin-transform-runtime": "^7.16.4",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
     "clean-webpack-plugin": "3.0.0",
     "clmtrackr": "^1.1.2",
-    "css-loader": "^6.5.0",
+    "constants-browserify": "^1.0.0",
+    "crypto-browserify": "^3.12.0",
+    "css-loader": "^6.5.1",
     "file-loader": "^6.2.0",
-    "firebase": "^9.2.0",
+    "firebase": "^9.5.0",
     "html-webpack-plugin": "5.5.0",
     "material-ui-image": "^3.3.2",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-firebase-auth": "^1.0.3",
     "react-router-dom": "^5.3.0",
-    "skyway-js": "^4.4.2",
+    "skyway-js": "^4.4.3",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
     "style-loader": "^3.3.1",
     "ts-loader": "6.2.1",
-    "typescript": "3.7.2"
+    "typescript": "3.7.2",
+    "util": "^0.12.4"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "@types/react-router-dom": "^5.3.2",
     "babel-loader": "^8.2.3",
     "babel-plugin-react-html-attrs": "^3.0.5",
     "dotenv-webpack": "^7.0.3",
     "prettier": "2.4.1",
-    "webpack": "^5.21.0",
+    "webpack": "^5.64.2",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.4.0"
+    "webpack-dev-server": "^4.5.0"
   }
 }
