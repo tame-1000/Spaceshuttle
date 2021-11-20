@@ -16,10 +16,11 @@ const useStyles = makeStyles({
   menuButton: {
     marginRight: 16,
     marginLeft: -12,
+    color: "#fff",
   },
 });
 
-const Nav = (location) => {
+const Nav = (props) => {
   const history = useHistory();
   const style = useStyles();
   const handleLogout = () => {
@@ -27,22 +28,29 @@ const Nav = (location) => {
     history.push("/signin");
   };
 
-  return (
-    <div style={{ height: "10%" }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Button onClick={handleLogout}>ログアウト</Button>
-          <section className={style.rightToolbar}>
-            <Link to="/profile" style={{ textDecoration: "none" }}>
-              <Button variant="outlined" fullWidth>
-                アバター設定
-              </Button>
-            </Link>
-          </section>
-        </Toolbar>
-      </AppBar>
-    </div>
-  );
+  console.log(props.pathname);
+
+  if (props.pathname !== "/signin" && props.pathname !== "/register") {
+    return (
+      <div style={{ height: "10%" }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Button onClick={handleLogout} className={style.menuButton}>
+              ログアウト
+            </Button>
+            <section className={style.rightToolbar}>
+              <Link to="/profile" style={{ textDecoration: "none" }}>
+                <Button className={style.menuButton} fullWidth>
+                  アバター設定
+                </Button>
+              </Link>
+            </section>
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
+  return <></>;
 };
 
 export default Nav;
