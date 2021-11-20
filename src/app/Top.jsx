@@ -80,6 +80,7 @@ const Top = () => {
 
   // 個別動画ページに飛ぶ関数
   const pushLink = (roomid) => {
+    //history.push(`/movie/${roomid}`);
     history.push(`/movie/${roomid}`);
   };
 

@@ -154,7 +154,7 @@ export const AvatarPlayer = ({ video }) => {
         if(positions!==false){
           drawFacePosition(cc,positions)
         }
-        console.log(ctracker.getCurrentPosition());
+        //console.log(ctracker.getCurrentPosition());
       }
 
       drawLoop();
