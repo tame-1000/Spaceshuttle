@@ -63,13 +63,6 @@ const RoomSetting = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [movie, setMovie] = useState();
 
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
   const theme = useTheme();
   const styles = useStyles(theme)();
 
@@ -92,15 +85,38 @@ const RoomSetting = () => {
     })();
   }, []);
 
-  // 個別動画ページに飛ぶ関数
-  const pushLink = (movieid) => {
-    console.log(movieid);
-  };
-
   const onChangeGroupName = (e) => {
     const currentGroupName = e.target.value;
     setGroupname(currentGroupName);
   };
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const cardClick = (movieid) => {
+    closeModal();
+    setMovie(movieid);
+  };
+
+  const registerDB = async () => {
+    try {
+      const roomRef = await db.collection("room").doc();
+      await roomRef.set({
+        groupname: groupname,
+        peerid: roomRef.id,
+        movieid: movie,
+        people: 1,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  console.log(movie);
 
   if (!isAdmin) {
     return <Redirect to="/"></Redirect>;
@@ -125,6 +141,14 @@ const RoomSetting = () => {
                 onChange={(e) => onChangeGroupName(e)}
                 fullWidth
               />
+              <TextField
+                className={styles.formBlock}
+                style={{ color: "black" }}
+                id="movieid"
+                label={movie}
+                fullWidth
+                disabled
+              />
               <Button
                 onClick={openModal}
                 className={styles.formBlock}
@@ -145,6 +169,7 @@ const RoomSetting = () => {
               variant="contained"
               color="primary"
               sx={{ mt: 3, mb: 2 }}
+              onClick={registerDB}
             >
               登録
             </Button>
@@ -167,7 +192,7 @@ const RoomSetting = () => {
                     index={index}
                     key={index}
                     movieid={content.movieid}
-                    onClick={pushLink}
+                    onClick={cardClick}
                   ></RoomCard>
                 );
               })}

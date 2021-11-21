@@ -16,6 +16,11 @@ import {
 } from "@material-ui/core";
 
 const RoomCard = (props) => {
+  // 個別ページに飛ぶ関数（props.onClickを実行）
+  const onClick = (id) => {
+    props.onClick(id);
+  };
+
   return (
     <Grid item xs={4} key={props.index}>
       {/* クリックしたら、個別動画ページに飛ぶように */}
