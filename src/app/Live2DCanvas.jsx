@@ -7,11 +7,10 @@ import {
 import { CubismModelSettingJson } from "../cubismSDK/Framework/src/cubismmodelsettingjson";
 import { LAppModel } from "../cubismSDK/Demo/src/lappmodel";
 import { LAppPal } from "../cubismSDK/Demo/src/lapppal";
-import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermodel";
 import { CubismMatrix44 } from "../cubismSDK/Framework/src/math/cubismmatrix44";
 
 const resourcesPath = "../../assets";
-const modelDir = ["tanuki_facerig"];
+const modelDir = ["tanuki_facerig", "20210622toki"];
 
 let model = null;
 
@@ -39,7 +38,7 @@ export const Live2DCanvas = ({ params }) => {
 
         // modelDirのindex．
         // 後から，Movie→FaceTracker→Live2DCanvasの順にして，indexをpropsで受け取るようにする
-        const index = 0;
+        const index = 1;
 
         let cubismOption = new Option();
 
@@ -187,13 +186,6 @@ export const Live2DCanvas = ({ params }) => {
         projectionMatrix.multiplyByMatrix(modelMatrix);
         model.getRenderer().setMvpMatrix(projectionMatrix);
 
-        // パラメータの設定
-        // setParams(model,params);
-
-        /**
-         * Live2Dモデルの描画
-         */
-
         // フレームバッファとビューポートを、フレームワーク設定
         let viewport = [
           0,
@@ -204,25 +196,11 @@ export const Live2DCanvas = ({ params }) => {
 
         model.getRenderer().setRenderState(frameBuffer, viewport);
 
-        // // 最後の更新時間
-        // let lastUpdateTime = 0;
-        // const loop = (time) => {
         // 頂点の更新
         model.getModel().update();
 
-        // viewport[2] = canvasRef.current.width;
-        // viewport[3] = canvasRef.current.height;
-        // model.getRenderer().setRenderState(frameBuffer, viewport);
-
         // モデルの描画
         model.getRenderer().drawModel();
-
-        //   console.log(params);
-
-        //   lastUpdateTime = time;
-        //   requestAnimationFrame(loop);
-        // };
-        // requestAnimationFrame(loop);
       };
       f();
 

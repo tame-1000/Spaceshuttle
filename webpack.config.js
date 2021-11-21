@@ -65,14 +65,9 @@ module.exports = {
     ],
   },
   devServer: {
-    static: [
-      {
-        directory: path.join(__dirname, "public"),
-      },
-      {
-        directory: path.join(__dirname, 'public', 'assets'),
-      }
-    ],
+    static: {
+      directory: path.join(__dirname, "public"),
+    },
     port: 9000,
   },
 };

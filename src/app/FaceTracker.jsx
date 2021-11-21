@@ -104,8 +104,7 @@ export const FaceTracker = ({ video }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const [params,setParams]=useState({});
-  // let params={};
+  const [params, setParams] = useState({});
 
   const swapPosition = (positions) => {
     if (positions === false) {
@@ -134,8 +133,8 @@ export const FaceTracker = ({ video }) => {
     );
   };
 
-  let cc=null;
-  let ctracker=null;
+  let cc = null;
+  let ctracker = null;
 
   useEffect(() => {
     if (videoRef.current && canvasRef.current) {
@@ -216,13 +215,12 @@ export const FaceTracker = ({ video }) => {
         }
 
         console.log(parameter);
-        setParams((prevParams)=>parameter);
+        setParams((prevParams) => parameter);
         console.log(params);
 
         if (positions !== false) {
           drawFacePosition(cc, positions);
         }
-        // console.log(ctracker.getCurrentPosition());
       }
 
       drawLoop();

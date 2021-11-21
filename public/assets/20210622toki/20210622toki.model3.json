@@ -1,0 +1,23 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "20210622toki.moc3",
+		"Textures": [
+			"20210622toki.4096/texture_00.png"
+		],
+		"Physics": "20210622toki.physics3.json",
+		"DisplayInfo": "20210622toki.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	]
+}
