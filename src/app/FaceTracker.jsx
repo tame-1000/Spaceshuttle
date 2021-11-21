@@ -1,5 +1,5 @@
 import { Grid, makeStyles } from "@material-ui/core";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clm from "clmtrackr";
 import { Live2DCanvas } from "./Live2DCanvas";
 
@@ -94,7 +94,9 @@ export const FaceTracker = ({ video }) => {
     video: {
       transform: "scaleX(-1)",
     },
-    canvas: {},
+    canvas: {
+      display: "none",
+    },
   }));
 
   const classes = useStyles();
@@ -102,7 +104,8 @@ export const FaceTracker = ({ video }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  let ctracker = null;
+  const [params,setParams]=useState({});
+  // let params={};
 
   const swapPosition = (positions) => {
     if (positions === false) {
@@ -124,6 +127,16 @@ export const FaceTracker = ({ video }) => {
     }
   };
 
+  const getDistance2 = (position, a, b) => {
+    return (
+      Math.pow(position[a][0] - position[b][0], 2) +
+      Math.pow(position[a][1] - position[b][1], 2)
+    );
+  };
+
+  let cc=null;
+  let ctracker=null;
+
   useEffect(() => {
     if (videoRef.current && canvasRef.current) {
       videoRef.current.srcObject = video.stream;
@@ -139,7 +152,9 @@ export const FaceTracker = ({ video }) => {
       );
       document.addEventListener("clmtrackrLost", () => console.log("Lost"));
 
-      let cc = canvasRef.current.getContext("2d");
+      cc = canvasRef.current.getContext("2d");
+
+      let parameter = {};
 
       function drawLoop() {
         // ここで毎フレームdrawLoopを呼び出すように設定する．
@@ -148,13 +163,66 @@ export const FaceTracker = ({ video }) => {
         // 毎フレーム出力用のキャンバスをクリアする．これをしないと重ね書きのようになってしまう．
         cc.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-        const positionsFromCtracker = ctracker.getCurrentPosition();
-        const positions = swapPosition(positionsFromCtracker);
+        let positions = ctracker.getCurrentPosition();
+        // const positions = swapPosition(positionsFromCtracker);
+
+        if (positions) {
+          let faceR = Math.sqrt(getDistance2(positions, 37, 2));
+          let faceL = Math.sqrt(getDistance2(positions, 37, 12));
+          let mouthH = Math.sqrt(getDistance2(positions, 57, 60));
+          let lipH = Math.sqrt(getDistance2(positions, 53, 57));
+
+          parameter["PARAM_ANGLE_X"] =
+            Math.asin((faceL - faceR) / (faceL + faceR)) * (180 / Math.PI) * 2;
+          parameter["PARAM_ANGLE_Y"] =
+            Math.asin(
+              ((positions[0][1] +
+                positions[14][1] -
+                positions[27][1] -
+                positions[32][1]) *
+                2) /
+                (positions[14][0] - positions[0][0])
+            ) *
+            (180 / Math.PI);
+          parameter["PARAM_ANGLE_Z"] =
+            -Math.atan(
+              (positions[32][1] - positions[27][1]) /
+                (positions[32][0] - positions[27][0])
+            ) *
+            (180 / Math.PI);
+          // mouth
+          parameter["PARAM_MOUTH_OPEN_Y"] = mouthH / lipH - 0.5;
+          parameter["PARAM_MOUTH_FORM"] =
+            2 *
+              Math.sqrt(
+                getDistance2(positions, 50, 44) /
+                  getDistance2(positions, 30, 25)
+              ) -
+            1;
+          // eye ball
+          parameter["PARAM_EYE_BALL_X"] =
+            Math.sqrt(
+              getDistance2(positions, 27, 23) / getDistance2(positions, 25, 23)
+            ) - 0.5;
+          parameter["PARAM_EYE_BALL_Y"] =
+            Math.sqrt(
+              getDistance2(positions, 27, 24) / getDistance2(positions, 26, 24)
+            ) - 0.5;
+          // eye brow
+          parameter["PARAM_BROW_L_Y"] =
+            (2 * Math.sqrt(getDistance2(positions, 24, 21))) / lipH - 4;
+          parameter["PARAM_BROW_R_Y"] =
+            (2 * Math.sqrt(getDistance2(positions, 29, 17))) / lipH - 4;
+        }
+
+        console.log(parameter);
+        setParams((prevParams)=>parameter);
+        console.log(params);
 
         if (positions !== false) {
           drawFacePosition(cc, positions);
         }
-        console.log(ctracker.getCurrentPosition());
+        // console.log(ctracker.getCurrentPosition());
       }
 
       drawLoop();
@@ -175,14 +243,13 @@ export const FaceTracker = ({ video }) => {
         width={300}
         height={300}
       ></video>
-      {/* {canvas} */}
       <canvas
         className={classes.canvas}
         ref={canvasRef}
         width={400}
         height={300}
       ></canvas>
-      <Live2DCanvas></Live2DCanvas>
+      <Live2DCanvas params={params}></Live2DCanvas>
     </Grid>
   );
 };
