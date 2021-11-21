@@ -84,20 +84,6 @@ const Movie = (props) => {
 
       // Room に Join している他のユーザのストリームを受信した時
       tmpRoom.on("stream", async (stream) => {  
-        console.log("change stream 1");
-        if ( typeof(stream) === 'object') {
-            console.log("change stream 2");
-            const remoteVideo = $('#video')[0];
-            remoteVideo.srcObject = stream;
-            remoteVideo.playsInline = true;
-            remoteVideo.setAttribute('data-peer-id', stream.peerId);
-            videosContainer.append(remoteVideo);
-    
-            await remoteVideo.play().catch(console.error);
-          } else {
-            console.log("streamなし");
-          }
-
         setRemoteVideo((prev) => [
           ...prev,
           { stream: stream, peerId: stream.peerId },
@@ -150,7 +136,6 @@ const Movie = (props) => {
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
       <video id="video" muted="true" width="480" height="240" autoPlay></video>
-      <Button onClick={() => startSS()}>ShareScreen</Button>
 
     </Container>
     // <Container justify="center" spacing={4}>
