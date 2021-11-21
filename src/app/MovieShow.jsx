@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, Suspense } from "react";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
 import { ThemeProvider, useTheme } from "@material-ui/styles";
@@ -7,7 +7,7 @@ import { MovieModal } from "./MovieModal";
 import { AvatarPlayer } from "./AvatarPlayer";
 
 
-const Movie = (props) => {
+const MovieShow = (props) => {
   // roomidを取得
   const roomId = props.match.params.roomid;
 
@@ -32,24 +32,27 @@ const Movie = (props) => {
   const roomMode = "mesh";
 
   const [remoteVideo, setRemoteVideo] = useState([]);
-  const [localStream, setLocalStream] = useState();
+  //const [localStream, setLocalStream] = useState();
   const [room, setRoom] = useState();
   const localVideoRef = useRef(null);
+  let localStream;
+  let tmpRoom;
 
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        setLocalStream(stream);
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-          localVideoRef.current.play().catch((e) => console.log(e));
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
+
+//   useEffect(() => {
+//     navigator.mediaDevices
+//       .getUserMedia({ video: true })
+//       .then((stream) => {
+//         setLocalStream(stream);
+//         if (localVideoRef.current) {
+//           localVideoRef.current.srcObject = stream;
+//           localVideoRef.current.play().catch((e) => console.log(e));
+//         }
+//       })
+//       .catch((e) => {
+//         console.log(e);
+//       });
+//   }, []);
 
   const onJoin = () => {
     if (peer.current) {
@@ -59,22 +62,33 @@ const Movie = (props) => {
       }
 
       // Roomにjoinする
-      const tmpRoom = peer.current.joinRoom(roomId, {
+      tmpRoom = peer.current.joinRoom(roomId, {
         mode: roomMode,
         stream: localStream,
       });
 
       const setStream = async () => {
+        if (ss.isScreenShareAvailable() === false) {
+            alert('Chromeの拡張機能をインストールしてください');
+            return;
+        }
         const stream = navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
         let localStream = await stream;
         $('#video')[0].srcObject = localStream;
         tmpRoom.replaceStream(localStream);
       }
 
+      tmpRoom.on("log", (log) => {
+        console.log(log);
+      });
+
       // ルームに参加した時
-      tmpRoom.once("open", () => {
+      tmpRoom.once("open", (id) => {
         setStream();
         console.log("=== You joined ===\n");
+        console.log("groupname is " + tmpRoom.name);
+        console.log("member is " + tmpRoom.member);
+        console.log("remote stream is " + tmpRoom.remoteStream)
       });
 
       // 他のユーザがRoomにjoinしてきた時
@@ -141,16 +155,9 @@ const Movie = (props) => {
 
   return (
     <Container>
+        <MovieModal onJoin={onJoin}></MovieModal>
       <Button onClick={() => onLeave()}>Leave</Button>
-      <Grid container>
-        <AvatarPlayer
-          video={{ stream: localStream, peerId: "local-stream" }}
-        ></AvatarPlayer>
-        {castVideo()}
-      </Grid>
-      <MovieModal onJoin={onJoin}></MovieModal>
       <video id="video" muted="true" width="480" height="240" autoPlay></video>
-      <Button onClick={() => startSS()}>ShareScreen</Button>
 
     </Container>
     // <Container justify="center" spacing={4}>
@@ -162,4 +169,4 @@ const Movie = (props) => {
   );
 };
 
-export default Movie;
+export default MovieShow;
