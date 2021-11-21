@@ -94,8 +94,8 @@ const Top = () => {
         <Grid container spacing={5}>
           {roomlist.map((content, index) => (
             <MovieCard
-              title={content.title}
-              desc={content.desc}
+              title={content.groupname}
+              desc={content.title}
               img={ImageSrc}
               num={content.people}
               index={index}

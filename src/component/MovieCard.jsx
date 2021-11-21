@@ -52,7 +52,7 @@ const MovieCard = (props) => {
               {props.title}
             </Typography>
             <Typography variant="body2">{props.desc}</Typography>
-            {props.num ? (
+            {props.num && props.num ? (
               props.num > 10 ? (
                 [...Array(10)].map((n, iconIndex) => (
                   <PersonIcon
