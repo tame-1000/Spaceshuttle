@@ -51,16 +51,21 @@ const Nav = (props) => {
       <div style={{ height: "10%" }}>
         <AppBar position="static">
           <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Typography
-              component="h2"
-              variant="h5"
-              color="inherit"
-              align="center"
-              noWrap
-              sx={{ flex: 1 }}
+            <Link
+              to="/"
+              style={{ textDecoration: "none", height: "100%", color: "#fff" }}
             >
-              Movie × Share
-            </Typography>
+              <Typography
+                component="h2"
+                variant="h5"
+                color="inherit"
+                align="center"
+                noWrap
+                sx={{ flex: 1 }}
+              >
+                Movie × Share
+              </Typography>
+            </Link>
             <Box sx={{ flexGrow: 5 }} />
             {isAdmin && (
               <Link

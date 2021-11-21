@@ -171,7 +171,7 @@ const RoomSetting = () => {
               sx={{ mt: 3, mb: 2 }}
               onClick={registerDB}
             >
-              登録
+              部屋をつくる
             </Button>
           </Grid>
           <Grid item xs={4}></Grid>
