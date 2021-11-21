@@ -10,12 +10,10 @@ import { LAppPal } from "../cubismSDK/Demo/src/lapppal";
 import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermodel";
 import { CubismMatrix44 } from "../cubismSDK/Framework/src/math/cubismmatrix44";
 
-import HaruJson from "../../public/assets/Haru/Haru.model3.json";
-
 const resourcesPath = "../../assets";
-const modelDir = ["Haru", "Hiyori", "Mark", "Natori", "Rice"];
+const modelDir = ["tanuki_facerig"];
 
-let model=null;
+let model = null;
 
 export const Live2DCanvas = ({ params }) => {
   const canvasRef = useRef(null);
@@ -158,10 +156,10 @@ export const Live2DCanvas = ({ params }) => {
         projectionMatrix.loadIdentity();
 
         // モデルが良い感じの大きさになるように拡大・縮小
-        const scale = 2;
+        const scale = 4;
         projectionMatrix.scaleRelative(scale, scale);
 
-        modelMatrix.centerY(0.0);
+        modelMatrix.centerY(0.5);
 
         let canvas = canvasRef.current;
 
@@ -235,9 +233,13 @@ export const Live2DCanvas = ({ params }) => {
   }, []);
 
   useEffect(() => {
+    let gl = canvasRef.current.getContext("webgl");
+    // Canvasをクリアする
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
     console.log(params);
 
-    if (model && params) {
+    if (model && params != {}) {
       setParams(model, params);
 
       // 頂点の更新
