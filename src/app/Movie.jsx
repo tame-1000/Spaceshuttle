@@ -5,6 +5,7 @@ import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
 import { ThemeProvider, useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
+import { FaceTracker } from "./FaceTracker";
 import { AvatarPlayer } from "./AvatarPlayer";
 import { useAuthContext } from "../context/authcontext";
 
@@ -133,7 +134,7 @@ const Movie = (props) => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <AvatarPlayer video={video} key={video.peerId} />;
+      return <FaceTracker video={video} key={video.peerId} />;
     });
   };
 
@@ -141,9 +142,7 @@ const Movie = (props) => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <AvatarPlayer
-          video={{ stream: localStream, peerId: "local-stream" }}
-        ></AvatarPlayer>
+        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} }></FaceTracker>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
