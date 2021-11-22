@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import { Box, Button, Container, Grid, makeStyles } from "@material-ui/core";
 import { ThemeProvider, useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
@@ -9,6 +10,7 @@ import { useAuthContext } from "../context/authcontext";
 
 const Movie = (props) => {
   const { isAdmin } = useAuthContext();
+  const history = useHistory();
   // roomidを取得
   const roomId = props.match.params.roomid;
 
@@ -25,7 +27,7 @@ const Movie = (props) => {
 
   const peer = useRef(
     new Peer({
-      key: process.env.SKYWAY_KEY,
+      key: process.env.REACT_APP_SKYWAY_KEY,
       debug: 3,
     })
   );
@@ -125,6 +127,7 @@ const Movie = (props) => {
           return false;
         });
       });
+      history.push("/");
     }
   };
 

@@ -25,7 +25,10 @@ export function AuthProvider({ children }) {
     const unsubscribed = auth.onAuthStateChanged((user) => {
       setUser(user);
       // ログインユーザ名をstateに
-      if (user.uid == "1ELDuwAE3pZdw0XXo0F627TuK822") setIsAdmin(true);
+      if (user && user.uid == "1ELDuwAE3pZdw0XXo0F627TuK822") {
+        console.log("You are Admin");
+        setIsAdmin(true);
+      }
       setLoading(false);
     });
     return () => {
