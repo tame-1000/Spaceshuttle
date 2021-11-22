@@ -6,7 +6,6 @@ import { ThemeProvider, useTheme } from "@material-ui/styles";
 import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
 import { FaceTracker } from "./FaceTracker";
-import { AvatarPlayer } from "./AvatarPlayer";
 import { useAuthContext } from "../context/authcontext";
 
 const Movie = (props) => {
