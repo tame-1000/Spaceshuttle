@@ -35,6 +35,7 @@ const Movie = (props) => {
   const [remoteVideo, setRemoteVideo] = useState([]);
   const [localStream, setLocalStream] = useState();
   const [room, setRoom] = useState();
+  const [isJoin, setIsJoin] = useState(false);
   const localVideoRef = useRef(null);
 
   useEffect(() => {
@@ -145,6 +146,7 @@ const Movie = (props) => {
       <MovieModal onJoin={onJoin}></MovieModal>
       <video id="video" muted="true" width="480" height="240" autoPlay></video>
     </Container>
+
     // <Container justify="center" spacing={4}>
     //   <h1>映画見る画面</h1>
     //   <Link to="/" style={{ textDecoration: "none" }}>
