@@ -12,7 +12,10 @@ import { CubismMatrix44 } from "../cubismSDK/Framework/src/math/cubismmatrix44";
 const resourcesPath = "../../assets";
 const modelDir = ["tanuki_facerig", "20210622toki"];
 
+const centerYs = [0.5, 0.3];
+
 let model = null;
+let gl = null;
 
 export const Live2DCanvas = ({ params }) => {
   const canvasRef = useRef(null);
@@ -23,7 +26,7 @@ export const Live2DCanvas = ({ params }) => {
     if (canvasRef.current) {
       const f = async () => {
         // WebGLコンテキストの初期化
-        const gl = canvasRef.current.getContext("webgl");
+        gl = canvasRef.current.getContext("webgl");
 
         if (gl === null) return alert("WebGL未対応のブラウザです。");
 
@@ -158,7 +161,7 @@ export const Live2DCanvas = ({ params }) => {
         const scale = 4;
         projectionMatrix.scaleRelative(scale, scale);
 
-        modelMatrix.centerY(0.5);
+        modelMatrix.centerY(centerYs[index]);
 
         let canvas = canvasRef.current;
 
@@ -211,13 +214,12 @@ export const Live2DCanvas = ({ params }) => {
   }, []);
 
   useEffect(() => {
-    let gl = canvasRef.current.getContext("webgl");
-    // Canvasをクリアする
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
     console.log(params);
 
-    if (model && params != {}) {
+    if (model && params != {} && gl) {
+      // Canvasをクリアする
+      gl.clear(gl.COLOR_BUFFER_BIT);
+
       setParams(model, params);
 
       // 頂点の更新
@@ -228,11 +230,11 @@ export const Live2DCanvas = ({ params }) => {
     }
   }, [params]);
 
-  return <canvas ref={canvasRef} width={120} height={90}></canvas>;
+  return <canvas ref={canvasRef} width={60} height={80}></canvas>;
 };
 
 const setParams = (model, params) => {
-  if (model && params) {
+  if (model && params != {}) {
     let cubismModel = model.getModel();
 
     cubismModel.setParameterValueById(

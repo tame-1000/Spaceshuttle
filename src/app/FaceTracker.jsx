@@ -1,6 +1,6 @@
 import { Grid, makeStyles } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
-import clm from "clmtrackr";
+// import clm from "clmtrackr";
 import { Live2DCanvas } from "./Live2DCanvas";
 
 /**
