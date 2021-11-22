@@ -106,7 +106,7 @@ const Movie = () => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <AvatarPlayer video={video} key={video.peerId} />;
+      return <FaceTracker video={video} key={video.peerId} />;
     });
   };
 

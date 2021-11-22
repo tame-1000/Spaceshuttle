@@ -16,6 +16,7 @@ const centerYs = [0.5, 0.3];
 
 let model = null;
 let gl = null;
+let canSetParams = false;
 
 export const Live2DCanvas = ({ params }) => {
   const canvasRef = useRef(null);
@@ -137,13 +138,16 @@ export const Live2DCanvas = ({ params }) => {
 
         // レンダラの作成（bindTextureより先にやっておく）
         model.createRenderer();
+
         // テクスチャをレンダラに設定
         textures.forEach((texture, index) => {
           model.getRenderer().bindTexture(index, texture);
         });
+
         // そのほかレンダラの設定
         model.getRenderer().setIsPremultipliedAlpha(true);
         model.getRenderer().startUp(gl);
+
         // 物理演算設定
         // model.loadPhysics(physics3ArrayBuffer, physics3ArrayBuffer.byteLength);
 
@@ -197,13 +201,24 @@ export const Live2DCanvas = ({ params }) => {
           canvasRef.current.height,
         ];
 
-        model.getRenderer().setRenderState(frameBuffer, viewport);
+        canSetParams = true;
 
-        // 頂点の更新
-        model.getModel().update();
+        const loop = () => {
+          // Canvasをクリアする
+          gl.clear(gl.COLOR_BUFFER_BIT);
 
-        // モデルの描画
-        model.getRenderer().drawModel();
+          // 頂点の更新
+          model.getModel().update();
+
+          model.getRenderer().setRenderState(frameBuffer, viewport);
+
+          // モデルの描画
+          model.getRenderer().drawModel();
+
+          requestAnimationFrame(loop);
+        };
+
+        requestAnimationFrame(loop);
       };
       f();
 
@@ -216,17 +231,8 @@ export const Live2DCanvas = ({ params }) => {
   useEffect(() => {
     console.log(params);
 
-    if (model && params != {} && gl) {
-      // Canvasをクリアする
-      gl.clear(gl.COLOR_BUFFER_BIT);
-
+    if (model && params && !(Object.keys(params).length == 0) && canSetParams) {
       setParams(model, params);
-
-      // 頂点の更新
-      model.getModel().update();
-
-      // モデルの描画
-      model.getRenderer().drawModel();
     }
   }, [params]);
 

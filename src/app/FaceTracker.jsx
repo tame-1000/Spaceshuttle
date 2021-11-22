@@ -137,12 +137,16 @@ export const FaceTracker = ({ video }) => {
   let ctracker = null;
 
   useEffect(() => {
-    if (videoRef.current && canvasRef.current) {
+    // if (videoRef.current && canvasRef.current) {
+    if (videoRef.current) {
       videoRef.current.srcObject = video.stream;
 
       ctracker = new clm.tracker();
-      ctracker.init();
+      ctracker.init(pModel);
 
+      ctracker.start(videoRef.current);
+
+      // startを2回実行すると良い
       let box = [0, 0, 400, 260];
       ctracker.start(videoRef.current, box);
 
@@ -151,16 +155,13 @@ export const FaceTracker = ({ video }) => {
       );
       document.addEventListener("clmtrackrLost", () => console.log("Lost"));
 
-      cc = canvasRef.current.getContext("2d");
+      // cc = canvasRef.current.getContext("2d");
 
       let parameter = {};
 
-      function drawLoop() {
-        // ここで毎フレームdrawLoopを呼び出すように設定する．
-        requestAnimationFrame(drawLoop);
-
+      function loop() {
         // 毎フレーム出力用のキャンバスをクリアする．これをしないと重ね書きのようになってしまう．
-        cc.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        // cc.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
         let positions = ctracker.getCurrentPosition();
         // const positions = swapPosition(positionsFromCtracker);
@@ -219,11 +220,14 @@ export const FaceTracker = ({ video }) => {
         console.log(params);
 
         if (positions !== false) {
-          drawFacePosition(cc, positions);
+          // drawFacePosition(cc, positions);
         }
+        // ここで毎フレームdrawLoopを呼び出すように設定する．
+        requestAnimationFrame(loop);
       }
 
-      drawLoop();
+      // ここで毎フレームdrawLoopを呼び出すように設定する．
+      requestAnimationFrame(loop);
     }
 
     return () => {
