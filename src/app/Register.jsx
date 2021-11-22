@@ -17,6 +17,7 @@ import {
 import ImageSrc from "../img/stage2.jpg";
 
 import { auth } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 
 const useStyles = (theme) => {
   return makeStyles({
@@ -60,6 +61,7 @@ const Register = () => {
     } else {
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
+        await createUserToFirestore(email);
         history.push("/signin");
       } catch (error) {
         console.log(error.code);
@@ -74,6 +76,18 @@ const Register = () => {
             alert("パスワードは6文字以上にしてください。");
         }
       }
+    }
+  };
+
+  // Firestoreにユーザーを追加する
+  const createUserToFirestore = async (email) => {
+    try {
+      await db
+        .collection("users")
+        .doc(email)
+        .set({ email: email, avatarid: 1 });
+    } catch (e) {
+      console.log(e);
     }
   };
 

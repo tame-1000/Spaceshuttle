@@ -9,9 +9,9 @@ import Layout from "./Layout";
 import Top from "./Top";
 import Signin from "./Signin";
 import Movie from "./Movie";
-import MovieSetting from "./MovieSetting";
+import RoomSetting from "./RoomSetting";
 import Profile from "./Profile";
-import Register from "./Register"
+import Register from "./Register";
 
 const root = document.getElementById("root");
 ReactDOM.render(
@@ -19,8 +19,8 @@ ReactDOM.render(
     <Layout>
       <Route exact path="/" component={Top}></Route>
       <Route exact path="/signin" component={Signin}></Route>
-      <Route exact path="/movie" component={Movie}></Route>
-      <Route exact path="/moviesetting" component={MovieSetting}></Route>
+      <Route exact path="/movie/:roomid" component={Movie}></Route>
+      <Route exact path="/roomsetting" component={RoomSetting}></Route>
       <Route exact path="/profile" component={Profile}></Route>
       <Route exact path="/register" component={Register}></Route>
     </Layout>

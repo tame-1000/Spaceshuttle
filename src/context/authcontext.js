@@ -10,10 +10,12 @@ export function useAuthContext() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const value = {
     user,
+    isAdmin,
     loading,
   };
 
@@ -23,6 +25,7 @@ export function AuthProvider({ children }) {
     const unsubscribed = auth.onAuthStateChanged((user) => {
       setUser(user);
       // ログインユーザ名をstateに
+      if (user.uid == "1ELDuwAE3pZdw0XXo0F627TuK822") setIsAdmin(true);
       setLoading(false);
     });
     return () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { useHistory, Redirect } from "react-router-dom";
 import { useTheme, makeStyles, Theme, Avatar } from "@material-ui/core";
@@ -17,12 +17,10 @@ import {
   CardContent,
 } from "@material-ui/core";
 
-import PersonIcon from "@material-ui/icons/Person";
-import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
-import AddIcon from "@material-ui/icons/Add";
-
 import MovieCard from "../component/MovieCard";
 import ImageSrc from "../img/seats.jpg";
+import { auth } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 
 const useStyles = (theme) => {
   return makeStyles({
@@ -44,29 +42,66 @@ const Top = () => {
   const history = useHistory();
   const { user } = useAuthContext();
   const theme = useTheme();
-  const styles = useStyles(theme)();
+  const styles = useStyles(theme);
+  const [roomlist, setRoomlist] = useState([""]);
 
-  const list = [
-    ["title1", "説明1", ImageSrc, 3],
-    ["title2", "説明2", ImageSrc, 2],
-    ["title3", "説明3", ImageSrc, 0],
-    ["title4", "説明4", ImageSrc, 8],
-    ["title5", "説明5", ImageSrc, 14],
-  ];
+  // 最初のレンダリングで動画データを読み込む
+  useEffect(() => {
+    (async () => {
+      const current_roomlist = [];
+      // 部屋データを取得し、リストに（roomid, movieid, people, groupname）
+      const res_room = await db
+        .collection("room")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            let data = doc.data();
+            data["roomid"] = doc.id; // ルームidを保存
+            current_roomlist.push(data);
+          });
+        });
+      // 部屋リストの各要素ごとに、動画データを取得する（title, desc）
+      for (let i = 0; i < current_roomlist.length; i++) {
+        let movieid = current_roomlist[i].movieid;
+        const res_movie = await db
+          .collection("movie")
+          .doc(movieid)
+          .get()
+          .then((docSnapshot) => {
+            const movie_data = docSnapshot.data();
+            // 動画タイトルと説明を保存
+            current_roomlist[i]["title"] = movie_data.title;
+            current_roomlist[i]["desc"] = movie_data.desc;
+          });
+      }
+      setRoomlist(current_roomlist); // トップページに表示する動画リストのstateを更新
+    })();
+  }, []);
+
+  // 個別動画ページに飛ぶ関数
+  const pushLink = (roomid) => {
+
+    history.push(`/movie/${roomid}`);
+  };
 
   if (!user) {
+    // ログインしていないときはサインインページに
     return <Redirect to="/signin" />;
   } else {
+    // ログインしたらトップページを描写
     return (
       <Container>
         <Grid container spacing={5}>
-          {list.map((content, index) => (
+          {roomlist.map((content, index) => (
             <MovieCard
-              title={content[0]}
-              desc={content[1]}
-              img={content[2]}
-              num={content[3]}
+              title={content.groupname}
+              desc={content.title}
+              img={ImageSrc}
+              num={content.people}
               index={index}
+              key={index}
+              roomid={content.roomid}
+              onClick={pushLink}
             ></MovieCard>
           ))}
         </Grid>
@@ -76,46 +111,3 @@ const Top = () => {
 };
 
 export default Top;
-
-/*
-            <Grid item xs={4} key={index}>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={content[2]}
-                    alt="green iguana"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {content[0]}
-                    </Typography>
-                    <Typography variant="body2">{content[1]}</Typography>
-                    {content[3] ? (
-                      content[3] > 10 ? (
-                        [...Array(10)].map((num, iconIndex) => (
-                          <PersonIcon
-                            className={styles.personIcon}
-                            key={index + iconIndex}
-                          ></PersonIcon>
-                        ))
-                      ) : (
-                        [...Array(content[3])].map((num, iconIndex) => (
-                          <PersonIcon
-                            className={styles.personIcon}
-                            key={index + iconIndex}
-                          ></PersonIcon>
-                        ))
-                      )
-                    ) : (
-                      <PersonOutlineIcon
-                        className={styles.personIcon}
-                        key={index + "0"}
-                      ></PersonOutlineIcon>
-                    )}
-                    {content[3] > 10 && <AddIcon></AddIcon>}
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>*/

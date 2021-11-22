@@ -8,9 +8,9 @@ const Layout = (props) => {
   const location = useLocation();
   return (
     <>
-      <Nav></Nav>
       <AuthProvider>
-        <div style={{ height: "90%" }}>{props.children}</div>
+        <Nav pathname={location.pathname}></Nav>
+        <div style={{ height: "100%" }}>{props.children}</div>
       </AuthProvider>
     </>
   );
