@@ -1,13 +1,16 @@
 import React, { useEffect, useRef } from "react";
-import {
-  CubismFramework,
-  LogLevel,
-  Option,
-} from "../cubismSDK/Framework/src/live2dcubismframework";
+import { CubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
 import { CubismModelSettingJson } from "../cubismSDK/Framework/src/cubismmodelsettingjson";
-import { LAppModel } from "../cubismSDK/Demo/src/lappmodel";
-import { LAppPal } from "../cubismSDK/Demo/src/lapppal";
 import { CubismMatrix44 } from "../cubismSDK/Framework/src/math/cubismmatrix44";
+import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermodel"
+
+// import { CubismFramework } from "../cubismSDK/Framework/dist/live2dcubismframework";
+// import { CubismModelSettingJson } from "../cubismSDK/Framework/dist/cubismmodelsettingjson";
+// import { CubismMatrix44 } from "../cubismSDK/Framework/dist/math/cubismmatrix44";
+// import { CubismUserModel } from "../cubismSDK/Framework/dist/model/cubismusermodel"
+
+// import { LAppModel } from "../cubismSDK/Demo/src/lappmodel";
+// import { LAppPal } from "../cubismSDK/Demo/src/lapppal";
 
 const resourcesPath = "../../assets";
 const modelDir = ["tanuki_facerig", "20210622toki"];
@@ -44,12 +47,8 @@ export const Live2DCanvas = ({ params }) => {
         // 後から，Movie→FaceTracker→Live2DCanvasの順にして，indexをpropsで受け取るようにする
         const index = 1;
 
-        let cubismOption = new Option();
-
         // prepare for Cubism Framework API.
-        cubismOption.logFunction = LAppPal.printMessage;
-        cubismOption.loggingLevel = LogLevel.LogLevel_Info;
-        CubismFramework.startUp(cubismOption);
+        CubismFramework.startUp();
 
         // initialize cubism
         CubismFramework.initialize();
@@ -132,7 +131,7 @@ export const Live2DCanvas = ({ params }) => {
          * Live2Dモデルの作成と設定
          */
 
-        model = new LAppModel();
+        model = new CubismUserModel();
         // モデルデータをロード
         model.loadModel(moc3ArrayBuffer);
 
