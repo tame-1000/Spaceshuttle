@@ -19,8 +19,7 @@ import {
 
 import MovieCard from "../component/MovieCard";
 import ImageSrc from "../img/seats.jpg";
-import { auth } from "../firebase/firebase";
-import { db } from "../firebase/firebase";
+import { auth, db, storage } from "../firebase/firebase";
 
 const useStyles = (theme) => {
   return makeStyles({
@@ -60,9 +59,26 @@ const Top = () => {
             current_roomlist.push(data);
           });
         });
+      let sumbnail_obj = {}; //サムネイルのキャッシュ
       // 部屋リストの各要素ごとに、動画データを取得する（title, desc）
       for (let i = 0; i < current_roomlist.length; i++) {
         let movieid = current_roomlist[i].movieid;
+        if (sumbnail_obj[movieid]){ //一度読み込んだことのあるサムネイルの場合
+            current_roomlist[i]["image"] = sumbnail_obj[movieid];
+        }
+        else { //読み込んだことのないサムネイルの場合
+            let ref = await storage
+                .ref()
+                .child(`${movieid}.png`)
+                .getDownloadURL()
+                .then((url) => {
+                    console.log(url);
+                    current_roomlist[i]["image"] = url;
+                    // urlをroomオブジェクトの要素に追加
+                    sumbnail_obj[movieid] = url;
+                    // キャッシュに保存
+            });
+        }
         const res_movie = await db
           .collection("movie")
           .doc(movieid)
@@ -96,7 +112,7 @@ const Top = () => {
             <MovieCard
               title={content.groupname}
               desc={content.title}
-              img={ImageSrc}
+              img={content.image}
               num={content.people}
               index={index}
               key={index}
