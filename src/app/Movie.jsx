@@ -27,7 +27,7 @@ const Movie = (props) => {
 
   const peer = useRef(
     new Peer({
-      key: process.env.REACT_APP_SKYWAY_KEY,
+      key: process.env.SKYWAY_KEY,
       debug: 3,
     })
   );
