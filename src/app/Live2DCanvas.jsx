@@ -24,7 +24,7 @@ let canSetParams = false;
 export const Live2DCanvas = ({ params }) => {
   const canvasRef = useRef(null);
 
-  console.log(params);
+  //console.log(params);
 
   useEffect(() => {
     if (canvasRef.current) {
