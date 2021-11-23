@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, Redirect, Link } from "react-router-dom";
 import Modal from "react-modal";
 
-import { db } from "../firebase/firebase";
+import { db, storage } from "../firebase/firebase";
 import { useAuthContext } from "../context/authcontext";
 import RoomCard from "../component/RoomCard";
 
@@ -44,7 +44,7 @@ const useStyles = (theme) => {
 
 const modalStyles = {
   content: {
-    width: "50%",
+    width: "70%",
     height: "60%",
     top: "50%",
     left: "50%",
@@ -59,6 +59,7 @@ const modalStyles = {
 const RoomSetting = () => {
   const { user, isAdmin } = useAuthContext();
   const [movieList, setMovieList] = useState([]);
+  const [sumbnailList, setSumbnailList] = useState({});
   const [groupname, setGroupname] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
   const [movie, setMovie] = useState();
@@ -84,6 +85,30 @@ const RoomSetting = () => {
       setMovieList(current_movielist);
     })();
   }, []);
+
+  useEffect(() => {
+      let sumbnail_obj = {};
+      (async () => {
+        for (let i = 0; i < movieList.length; i++) {
+            let movieid = movieList[i].movieid;
+            if (sumbnail_obj[movieid]){ //一度読み込んだことのあるサムネイルの場合
+                data["image"] = sumbnail_obj[movieid];
+            }else{ //読み込んだことのないサムネイルの場合
+                await storage
+                    .ref()
+                    .child(`${movieid}.png`)
+                    .getDownloadURL()
+                    .then((url) => {
+                        console.log(url);
+                        // urlをdataオブジェクトの要素に追加
+                        sumbnail_obj[movieid] = url;
+                        // キャッシュに保存
+                    });
+            }
+        }
+        setSumbnailList(sumbnail_obj);
+       })();
+  }, [movieList]);
 
   const onChangeGroupName = (e) => {
     const currentGroupName = e.target.value;
@@ -188,7 +213,7 @@ const RoomSetting = () => {
                   <RoomCard
                     title={content.title}
                     desc={content.desc}
-                    img={ImageSrc}
+                    img={sumbnailList[content.movieid]}
                     index={index}
                     key={index}
                     movieid={content.movieid}
