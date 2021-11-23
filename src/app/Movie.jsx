@@ -7,6 +7,7 @@ import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
 import { FaceTracker } from "./FaceTracker";
 import { useAuthContext } from "../context/authcontext";
+import { CubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
 
 const Movie = (props) => {
   const { isAdmin } = useAuthContext();
@@ -32,6 +33,12 @@ const Movie = (props) => {
     })
   );
 
+  // prepare for Cubism Framework API.
+  CubismFramework.startUp();
+
+  // initialize cubism
+  CubismFramework.initialize();
+
   const roomMode = "mesh";
 
   const [remoteVideo, setRemoteVideo] = useState([]);
@@ -53,6 +60,10 @@ const Movie = (props) => {
       .catch((e) => {
         console.log(e);
       });
+
+      return () => {
+        CubismFramework.dispose();
+      };
   }, []);
 
   const onJoin = () => {
