@@ -27,7 +27,11 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: "ts-loader" },
+      { 
+        test: /\.(ts|tsx)?$/,
+        exclude: /node_modules/,
+        loader: "ts-loader"
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
@@ -57,11 +61,11 @@ module.exports = {
         loader: "file-loader",
         options: {},
       },
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        loader: 'ts-loader'
-      },
+      // {
+      //   test: /.ts$/,
+      //   exclude: /node_modules/,
+      //   loader: 'ts-loader'
+      // },
     ],
   },
   devServer: {
@@ -70,4 +74,5 @@ module.exports = {
     },
     port: 9000,
   },
+  devtool: 'source-map',
 };
