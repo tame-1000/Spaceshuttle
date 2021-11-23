@@ -1,34 +1,28 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
 import { CubismModelSettingJson } from "../cubismSDK/Framework/src/cubismmodelsettingjson";
 import { CubismMatrix44 } from "../cubismSDK/Framework/src/math/cubismmatrix44";
-import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermodel"
-
-// import { CubismFramework } from "../cubismSDK/Framework/dist/live2dcubismframework";
-// import { CubismModelSettingJson } from "../cubismSDK/Framework/dist/cubismmodelsettingjson";
-// import { CubismMatrix44 } from "../cubismSDK/Framework/dist/math/cubismmatrix44";
-// import { CubismUserModel } from "../cubismSDK/Framework/dist/model/cubismusermodel"
-
-// import { LAppModel } from "../cubismSDK/Demo/src/lappmodel";
-// import { LAppPal } from "../cubismSDK/Demo/src/lapppal";
-
-let model = null;
-let canSetParams = false;
-let gl = null;
+import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermodel";
 
 export const Live2DCanvas = ({ params }) => {
   const canvasRef = useRef(null);
+  const modelRef = useRef(null);
+  const isInitCompletedRef = useRef(false);
 
   const resourcesPath = "../../assets";
   const modelDir = ["tanuki_facerig", "20210622toki"];
 
   const centerYs = [0.5, 0.3];
-  
+
+  // ここで以下のコードを実施しても，すぐにmodelRef.currentはundefinedになるかも
+  // なぜなら，paramsの更新のたびに，modelRef.currentがnullになるから．...なのか?
+  // modelRef.current = new CubismUserModel();
+
   useEffect(() => {
     if (canvasRef.current) {
       const f = async () => {
         // WebGLコンテキストの初期化
-        gl = canvasRef.current.getContext("webgl");
+        let gl = canvasRef.current.getContext("webgl");
 
         if (gl === null) return alert("WebGL未対応のブラウザです。");
 
@@ -120,10 +114,12 @@ export const Live2DCanvas = ({ params }) => {
         }
 
         /**
-         * Live2Dモデルの作成と設定
+         * Live2Dモデルの作成，設定
          */
 
-        model = new CubismUserModel();
+        modelRef.current = new CubismUserModel();
+        const model = modelRef.current;
+
         // モデルデータをロード
         model.loadModel(moc3ArrayBuffer);
 
@@ -192,7 +188,7 @@ export const Live2DCanvas = ({ params }) => {
           canvasRef.current.height,
         ];
 
-        canSetParams = true;
+        isInitCompletedRef.current = true;
 
         const loop = () => {
           // Canvasをクリアする
@@ -211,18 +207,24 @@ export const Live2DCanvas = ({ params }) => {
 
         requestAnimationFrame(loop);
       };
+
       f();
     }
   }, []);
 
   useEffect(() => {
-    // console.log(params);
+    let model = modelRef.current;
 
-    if (model && params && !(Object.keys(params).length == 0) && canSetParams) {
+    if (
+      model &&
+      params &&
+      !(Object.keys(params).length == 0) &&
+      isInitCompletedRef.current
+    ) {
       setParams(model, params);
     }
   }, [params]);
-
+  console.log(modelRef.current);
   return <canvas ref={canvasRef} width={60} height={80}></canvas>;
 };
 
