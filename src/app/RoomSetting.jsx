@@ -66,6 +66,7 @@ const RoomSetting = () => {
 
   const theme = useTheme();
   const styles = useStyles(theme)();
+  const history = useHistory();
 
   // 最初のレンダリングで動画データを読み込む
   useEffect(() => {
@@ -137,6 +138,7 @@ const RoomSetting = () => {
         movieid: movie,
         people: 1,
       });
+      history.push("/");
     } catch (e) {
       console.log(e);
     }
