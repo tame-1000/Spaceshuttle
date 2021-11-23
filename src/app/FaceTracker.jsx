@@ -215,9 +215,9 @@ export const FaceTracker = ({ video }) => {
             (2 * Math.sqrt(getDistance2(positions, 29, 17))) / lipH - 4;
         }
 
-        console.log(parameter);
+        // console.log(parameter);
         setParams((prevParams) => parameter);
-        console.log(params);
+        // console.log(params);
 
         if (positions !== false) {
           // drawFacePosition(cc, positions);

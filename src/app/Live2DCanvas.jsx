@@ -12,20 +12,18 @@ import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermode
 // import { LAppModel } from "../cubismSDK/Demo/src/lappmodel";
 // import { LAppPal } from "../cubismSDK/Demo/src/lapppal";
 
-const resourcesPath = "../../assets";
-const modelDir = ["tanuki_facerig", "20210622toki"];
-
-const centerYs = [0.5, 0.3];
-
 let model = null;
-let gl = null;
 let canSetParams = false;
+let gl = null;
 
 export const Live2DCanvas = ({ params }) => {
   const canvasRef = useRef(null);
 
-  //console.log(params);
+  const resourcesPath = "../../assets";
+  const modelDir = ["tanuki_facerig", "20210622toki"];
 
+  const centerYs = [0.5, 0.3];
+  
   useEffect(() => {
     if (canvasRef.current) {
       const f = async () => {
@@ -46,12 +44,6 @@ export const Live2DCanvas = ({ params }) => {
         // modelDirのindex．
         // 後から，Movie→FaceTracker→Live2DCanvasの順にして，indexをpropsで受け取るようにする
         const index = 1;
-
-        // prepare for Cubism Framework API.
-        CubismFramework.startUp();
-
-        // initialize cubism
-        CubismFramework.initialize();
 
         let modelPath = resourcesPath + "/" + modelDir[index] + "/";
         let modelJsonName = modelDir[index] + ".model3.json";
@@ -220,15 +212,11 @@ export const Live2DCanvas = ({ params }) => {
         requestAnimationFrame(loop);
       };
       f();
-
-      return () => {
-        CubismFramework.dispose();
-      };
     }
   }, []);
 
   useEffect(() => {
-    console.log(params);
+    // console.log(params);
 
     if (model && params && !(Object.keys(params).length == 0) && canSetParams) {
       setParams(model, params);
