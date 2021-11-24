@@ -7,6 +7,7 @@ import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermode
 export const Live2DCanvas = ({ params }) => {
   const canvasRef = useRef(null);
   const modelRef = useRef(null);
+  const isInitCompletedRef=useRef(false);
 
   const resourcesPath = "../../assets";
   const modelDir = ["tanuki_facerig", "20210622toki"];
@@ -187,6 +188,9 @@ export const Live2DCanvas = ({ params }) => {
           canvasRef.current.height,
         ];
 
+        isInitCompletedRef.current=true;
+        
+
         const loop = () => {
           // Canvasをクリアする
           gl.clear(gl.COLOR_BUFFER_BIT);
@@ -221,7 +225,7 @@ export const Live2DCanvas = ({ params }) => {
       setParams(model, params);
     }
   }, [params]);
-  
+
   return <canvas ref={canvasRef} width={60} height={80}></canvas>;
 };
 
