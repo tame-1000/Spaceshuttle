@@ -221,7 +221,7 @@ export const Live2DCanvas = ({ params }) => {
       setParams(model, params);
     }
   }, [params]);
-  console.log(modelRef.current);
+  
   return <canvas ref={canvasRef} width={60} height={80}></canvas>;
 };
 
