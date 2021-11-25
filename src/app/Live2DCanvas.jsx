@@ -21,8 +21,6 @@ export const Live2DCanvas = ({ params, canvasId }) => {
   useEffect(() => {
     if (canvasRef.current) {
       const f = async () => {
-        flags.push(false);
-
         // WebGLコンテキストの初期化
         let gl = canvasRef.current.getContext("webgl");
 
