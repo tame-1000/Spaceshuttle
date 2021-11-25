@@ -89,7 +89,7 @@ const faceCoordinateIndexForMapping = [
   { from: 48, to: 46 },
 ];
 
-export const FaceTracker = ({ video }) => {
+export const FaceTracker = ({ video,canvasId }) => {
   const useStyles = makeStyles(() => ({
     video: {
       transform: "scaleX(-1)",
@@ -251,7 +251,7 @@ export const FaceTracker = ({ video }) => {
         width={400}
         height={300}
       ></canvas>
-      <Live2DCanvas params={params}></Live2DCanvas>
+      <Live2DCanvas params={params} canvasId={canvasId}></Live2DCanvas>
     </Grid>
   );
 };

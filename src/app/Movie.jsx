@@ -144,7 +144,7 @@ const Movie = (props) => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <FaceTracker video={video} key={video.peerId} />;
+      return <FaceTracker video={video} canvasId={1}/>;
     });
   };
 
@@ -152,7 +152,7 @@ const Movie = (props) => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} }></FaceTracker>
+        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} } canvasId={0}></FaceTracker>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
