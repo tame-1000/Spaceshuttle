@@ -9,6 +9,10 @@ export const FaceTracker = ({ video, canvasId, avatarId }) => {
     canvas: {
       display: "none",
     },
+    glcanvas:{
+      // width: "200",
+      // height: "200",
+    }
   }));
 
   const classes = useStyles();
@@ -137,7 +141,7 @@ export const FaceTracker = ({ video, canvasId, avatarId }) => {
         width={400}
         height={300}
       ></canvas>
-      <canvas id={"glcanvas" + "_" + canvasId} />
+      <canvas className={classes.glcanvas} id={"glcanvas" + "_" + canvasId} />
       <div style={{ display: "none" }}>
         PARAM_Y
         <input

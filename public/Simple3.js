@@ -40,21 +40,6 @@ var Simple3 = function (canvasid, id) {
    */
   this.loadedImages = [];
 
-  /*
-   * Live2D モデル設定。
-   */
-  //    this.modelDef = {
-  //
-  //        "type":"Live2D Model Setting",
-  //        "name":"haru",
-  //        "model":"assets/haru/haru.moc",
-  //        "textures":[
-  //            "assets/haru/haru.1024/texture_00.png",
-  //            "assets/haru/haru.1024/texture_01.png",
-  //            "assets/haru/haru.1024/texture_02.png"
-  //        ]
-  //    };
-
   var MODEL_DEF = [
     {
       type: "Live2D Model Setting",
@@ -63,24 +48,18 @@ var Simple3 = function (canvasid, id) {
       textures: ["../../assets/koharu/koharu.2048/texture_00.png"],
     },
   ];
-  // var min = 0 ;
-  // var max = 5 ;
-  //
-  // var a = Math.floor( Math.random() * (max + 1 - min) ) + min ;
-  // var a = 5;
 
   this.modelDef = MODEL_DEF[id];
   this.modelId = id;
 
   // Live2Dの初期化
   Live2D.init();
-  // console.log("dd")
 
   // canvasオブジェクトを取得
   this.canvas = document.getElementById("glcanvas"+"_"+canvasid);
   this.canvasId = canvasid;
-  this.canvas.width = 100;
-  this.canvas.height = 100;
+  this.canvas.width = 200;
+  this.canvas.height = 200;
   // コンテキストを失ったとき
 
   var self = this;
@@ -232,10 +211,10 @@ Simple3.prototype.draw = function (gl /*WebGLコンテキスト*/, that) {
   var mmat = new L2DModelMatrix(width, height);
 
   // サイズ(幅)
-  mmat.setWidth(2);
+  mmat.setWidth(3);
 
   // ポジション(X, Y)
-  mmat.setCenterPosition(0.0, 0.0);
+  mmat.setCenterPosition(0.0, -0.9);
 
   // if (that.modelId == 2) {
   //   mmat.setWidth(5.5);
@@ -244,18 +223,6 @@ Simple3.prototype.draw = function (gl /*WebGLコンテキスト*/, that) {
 
   // 配列をセット
   that.live2DModel.setMatrix(mmat.getArray());
-  // キャラクターのパラメータを適当に更新
-  var t = UtSystem.getTimeMSec() * 0.001 * 2 * Math.PI; //1秒ごとに2π(1周期)増える
-  var cycle = 3.0; //パラメータが一周する時間(秒)
-  var cycleA = 6.0; //パラメータが一周する時間(秒)
-  // PARAM_ANGLE_Xのパラメータが[cycle]秒ごとに-30から30まで変化する
-  //    live2DModel.setParamFloat("PARAM_ANGLE_Z", 30 * Math.sin(t/cycle));
-  //    L2D_X.value = 30 * Math.cos(t/cycle);
-  //    L2D_Y.value = 30 * Math.sin(t/cycle);
-  //    posX.value = 2.0 * Math.cos(t/cycleA);
-  //   console.log(that.canvasId)
-
-  console.log("L2D_X.value: ",that.L2D_X.value)
 
   that.live2DModel.setParamFloat("PARAM_ANGLE_X", that.L2D_X.value);
   that.live2DModel.setParamFloat("PARAM_ANGLE_Y", that.L2D_Y.value);
