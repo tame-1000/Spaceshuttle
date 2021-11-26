@@ -87,6 +87,7 @@ const Movie = (props) => {
             video: true,
             audio: true,
           });
+          console.log(stream);
           let localStream = await stream;
           $("#video")[0].srcObject = localStream;
           tmpRoom.replaceStream(localStream);
@@ -106,10 +107,14 @@ const Movie = (props) => {
 
       // Room に Join している他のユーザのストリームを受信した時
       tmpRoom.on("stream", async (stream) => {
+        stream.getAudioTracks()[0].forEach(track => track.enabled = true);
+        $("#video")[0].srcObject = stream;
+        //$("#video")[0].srcObject.getAudioTracks()[0].forEach(track => track.enabled = true);
         setRemoteVideo((prev) => [
           ...prev,
           { stream: stream, peerId: stream.peerId },
         ]);
+        console.log(stream);
       });
 
       // 他のユーザがroomを退出した時
@@ -131,9 +136,9 @@ const Movie = (props) => {
   const onLeave = () => {
     if (room) {
       room.close();
+      // ss.stop();
       setRemoteVideo((prev) => {
         return prev.filter((video) => {
-          ss.stop();
           video.stream.getTracks().forEach((track) => track.stop());
           return false;
         });
@@ -156,7 +161,7 @@ const Movie = (props) => {
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
-      <video id="video" muted="true" width="480" height="240" autoPlay></video>
+      <video id="video" width="1024" height="960" autoPlay></video>
     </Container>
 
     // <Container justify="center" spacing={4}>
