@@ -17,7 +17,6 @@ import {
   Box,
 } from "@material-ui/core";
 
-import ImageSrc from "../img/seats.jpg";
 
 const useStyles = (theme) => {
   return makeStyles({

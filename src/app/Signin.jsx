@@ -14,7 +14,7 @@ import {
   CardMedia,
 } from "@material-ui/core";
 
-import ImageSrc from "../img/seats.jpg";
+import ImageSrc from "../img/bear_living.jpg";
 
 import { auth } from "../firebase/firebase";
 
