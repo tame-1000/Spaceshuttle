@@ -4,7 +4,7 @@ import { CubismModelSettingJson } from "../cubismSDK/Framework/src/cubismmodelse
 import { CubismMatrix44 } from "../cubismSDK/Framework/src/math/cubismmatrix44";
 import { CubismUserModel } from "../cubismSDK/Framework/src/model/cubismusermodel";
 
-export const Live2DCanvas = ({ params }) => {
+export const Live2DCanvas = ({ params, canvasId }) => {
   const canvasRef = useRef(null);
   const modelRef = useRef(null);
   const isInitCompletedRef = useRef(false);
@@ -190,13 +190,22 @@ export const Live2DCanvas = ({ params }) => {
 
         isInitCompletedRef.current = true;
 
+        let varCanvasId = canvasId;
+
+        console.log("canvasId: ", canvasId);
+        console.log("varCanvasId: ", varCanvasId);
+
         const loop = () => {
+          console.log("canvasId: ", canvasId);
+          console.log("varCanvasId: ", varCanvasId);
+
           // Canvasをクリアする
           gl.clear(gl.COLOR_BUFFER_BIT);
 
           // 頂点の更新
           model.getModel().update();
 
+          // frameBufferをRefにしてみる
           model.getRenderer().setRenderState(frameBuffer, viewport);
 
           // モデルの描画
@@ -224,7 +233,6 @@ export const Live2DCanvas = ({ params }) => {
       setParams(model, params);
     }
   }, [params]);
-  //console.log(modelRef.current);
   return <canvas ref={canvasRef} width={60} height={80}></canvas>;
 };
 

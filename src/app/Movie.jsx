@@ -7,7 +7,6 @@ import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
 import { FaceTracker } from "./FaceTracker";
 import { useAuthContext } from "../context/authcontext";
-import { CubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
 
 const Movie = (props) => {
   const { isAdmin } = useAuthContext();
@@ -33,12 +32,6 @@ const Movie = (props) => {
     })
   );
 
-  // prepare for Cubism Framework API.
-  CubismFramework.startUp();
-
-  // initialize cubism
-  CubismFramework.initialize();
-
   const roomMode = "mesh";
 
   const [remoteVideo, setRemoteVideo] = useState([]);
@@ -49,7 +42,7 @@ const Movie = (props) => {
 
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({ video: true, audio: false })
       .then((stream) => {
         setLocalStream(stream);
         if (localVideoRef.current) {
@@ -60,10 +53,6 @@ const Movie = (props) => {
       .catch((e) => {
         console.log(e);
       });
-
-      return () => {
-        CubismFramework.dispose();
-      };
   }, []);
 
   const onJoin = () => {
@@ -87,9 +76,10 @@ const Movie = (props) => {
             video: true,
             audio: true,
           });
-          console.log(stream);
           let localStream = await stream;
           $("#video")[0].srcObject = localStream;
+          isSS = 1;
+          console.log(localStream.getAudioTracks());
           tmpRoom.replaceStream(localStream);
         }
       };
@@ -107,14 +97,12 @@ const Movie = (props) => {
 
       // Room に Join している他のユーザのストリームを受信した時
       tmpRoom.on("stream", async (stream) => {
-        stream.getAudioTracks()[0].forEach(track => track.enabled = true);
         $("#video")[0].srcObject = stream;
-        //$("#video")[0].srcObject.getAudioTracks()[0].forEach(track => track.enabled = true);
+        //$("#video")[0].getAudioTracks()[0].forEach(track => track.enabled = true);
         setRemoteVideo((prev) => [
           ...prev,
           { stream: stream, peerId: stream.peerId },
         ]);
-        console.log(stream);
       });
 
       // 他のユーザがroomを退出した時
@@ -149,7 +137,7 @@ const Movie = (props) => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <FaceTracker video={video} key={video.peerId} />;
+      return <FaceTracker video={video} canvasId={1} avatarId={0}/>;
     });
   };
 
@@ -157,19 +145,12 @@ const Movie = (props) => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} }></FaceTracker>
+        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} } canvasId={0} avatarId={0}></FaceTracker>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
-      <video id="video" width="1024" height="960" autoPlay></video>
+      <video id="video" width="820" height="960" autoPlay></video>
     </Container>
-
-    // <Container justify="center" spacing={4}>
-    //   <h1>映画見る画面</h1>
-    //   <Link to="/" style={{ textDecoration: "none" }}>
-    //     <Button variant="outlined">トップページに戻る</Button>
-    //   </Link>
-    // </Container>
   );
 };
 
