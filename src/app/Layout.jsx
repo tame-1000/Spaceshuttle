@@ -7,11 +7,12 @@ import Nav from "./Nav";
 const Layout = (props) => {
   const location = useLocation();
 
-  if (location.pathname !== "/signin" && location.pathname !== "/register") {
-    return (
-      <>
-        <AuthProvider>
-          <Nav pathname={location.pathname}></Nav>
+  return (
+    <>
+      <AuthProvider>
+        <Nav pathname={location.pathname}></Nav>
+        {location.pathname !== "/signin" &&
+        location.pathname !== "/register" ? (
           <div
             style={{
               paddingTop: "80px",
@@ -21,14 +22,7 @@ const Layout = (props) => {
           >
             {props.children}
           </div>
-        </AuthProvider>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <AuthProvider>
-          <Nav pathname={location.pathname}></Nav>
+        ) : (
           <div
             style={{
               height: "100%",
@@ -36,10 +30,10 @@ const Layout = (props) => {
           >
             {props.children}
           </div>
-        </AuthProvider>
-      </>
-    );
-  }
+        )}
+      </AuthProvider>
+    </>
+  );
 };
 
 export default Layout;
