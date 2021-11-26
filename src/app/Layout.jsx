@@ -10,7 +10,15 @@ const Layout = (props) => {
     <>
       <AuthProvider>
         <Nav pathname={location.pathname}></Nav>
-        <div style={{ height: "100%" }}>{props.children}</div>
+        <div
+          style={{
+            paddingTop: "80px",
+            height: "100%",
+            backgroundColor: "#F8F8FF",
+          }}
+        >
+          {props.children}
+        </div>
       </AuthProvider>
     </>
   );

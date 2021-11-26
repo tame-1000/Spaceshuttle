@@ -48,45 +48,29 @@ const Nav = (props) => {
 
   if (props.pathname !== "/signin" && props.pathname !== "/register") {
     return (
-      <div style={{ height: "10%" }}>
-        <AppBar position="static">
-          <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Link
-              to="/"
-              style={{ textDecoration: "none", height: "100%", color: "#fff" }}
+      <AppBar position="static">
+        <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Link
+            to="/"
+            style={{ textDecoration: "none", height: "100%", color: "#fff" }}
+          >
+            <Typography
+              component="h2"
+              variant="h5"
+              color="inherit"
+              align="center"
+              noWrap
+              sx={{ flex: 1 }}
             >
-              <Typography
-                component="h2"
-                variant="h5"
-                color="inherit"
-                align="center"
-                noWrap
-                sx={{ flex: 1 }}
-              >
-                Movie × Share
-              </Typography>
-            </Link>
-            <Box sx={{ flexGrow: 5 }} />
-            {isAdmin && (
-              <Link
-                to="/roomsetting"
-                style={{ textDecoration: "none", height: "100%" }}
-              >
-                <Button className={style.menuButton} fullWidth>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <MeetingRoomIcon></MeetingRoomIcon>
-                    <span style={{ margin: "0 0.5em" }}>部屋をつくる</span>
-                  </div>
-                </Button>
-              </Link>
-            )}
-            <Link to="/profile" style={{ textDecoration: "none" }}>
+              Space Shuttle
+            </Typography>
+          </Link>
+          <Box sx={{ flexGrow: 5 }} />
+          {isAdmin && (
+            <Link
+              to="/roomsetting"
+              style={{ textDecoration: "none", height: "100%" }}
+            >
               <Button className={style.menuButton} fullWidth>
                 <div
                   style={{
@@ -95,13 +79,14 @@ const Nav = (props) => {
                     flexWrap: "wrap",
                   }}
                 >
-                  <AccountCircleIcon></AccountCircleIcon>
-                  <span style={{ margin: "0 0.5em" }}>アバター設定</span>
+                  <MeetingRoomIcon></MeetingRoomIcon>
+                  <span style={{ margin: "0 0.5em" }}>部屋をつくる</span>
                 </div>
               </Button>
             </Link>
-            <Box sx={{ flexGrow: 1 }} />
-            <Button onClick={handleLogout} className={style.menuButton}>
+          )}
+          <Link to="/profile" style={{ textDecoration: "none" }}>
+            <Button className={style.menuButton} fullWidth>
               <div
                 style={{
                   display: "flex",
@@ -109,13 +94,26 @@ const Nav = (props) => {
                   flexWrap: "wrap",
                 }}
               >
-                <ExitToAppIcon></ExitToAppIcon>
-                <span style={{ margin: "0 0.5em" }}>ログアウト</span>
+                <AccountCircleIcon></AccountCircleIcon>
+                <span style={{ margin: "0 0.5em" }}>アバター設定</span>
               </div>
             </Button>
-          </Toolbar>
-        </AppBar>
-      </div>
+          </Link>
+          <Box sx={{ flexGrow: 1 }} />
+          <Button onClick={handleLogout} className={style.menuButton}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <ExitToAppIcon></ExitToAppIcon>
+              <span style={{ margin: "0 0.5em" }}>ログアウト</span>
+            </div>
+          </Button>
+        </Toolbar>
+      </AppBar>
     );
   }
   return <></>;
