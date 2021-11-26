@@ -38,7 +38,7 @@ export const FaceTracker = ({ video, canvasId, avatarId }) => {
 
       ctrackerRef.current = new clm.tracker();
 
-      ctrackerRef.current.init(pModel);
+      ctrackerRef.current.init();
 
       ctrackerRef.current.start(videoRef.current);
 

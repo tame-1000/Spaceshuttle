@@ -7,7 +7,6 @@ import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
 import { FaceTracker } from "./FaceTracker";
 import { useAuthContext } from "../context/authcontext";
-import { CubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
 
 const Movie = (props) => {
   const { isAdmin } = useAuthContext();
