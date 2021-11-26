@@ -14,6 +14,7 @@ const Layout = (props) => {
           style={{
             paddingTop: "80px",
             backgroundColor: "#F8F8FF",
+            minHeight: "100%",
           }}
         >
           {props.children}
