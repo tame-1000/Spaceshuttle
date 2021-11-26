@@ -1,102 +1,19 @@
 import { Grid, makeStyles } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
-// import clm from "clmtrackr";
-import { Live2DCanvas } from "./Live2DCanvas";
 
-/**
- * 顔座標のindex
- * scaleX(-1) している場合(前面カメラ利用時)、座標が鏡のように左右入れ替わるので
- * それを補填する
- */
-const faceCoordinateIndexForMapping = [
-  // 輪郭
-  { from: 0, to: 14 },
-  { from: 1, to: 13 },
-  { from: 2, to: 12 },
-  { from: 3, to: 11 },
-  { from: 4, to: 10 },
-  { from: 5, to: 9 },
-  { from: 6, to: 8 },
-  { from: 7, to: 7 },
-  { from: 8, to: 6 },
-  { from: 9, to: 5 },
-  { from: 10, to: 4 },
-  { from: 11, to: 3 },
-  { from: 12, to: 2 },
-  { from: 13, to: 1 },
-  { from: 14, to: 0 },
-  // 左眉
-  { from: 19, to: 15 },
-  { from: 20, to: 16 },
-  { from: 21, to: 17 },
-  { from: 22, to: 18 },
-  // 左目
-  { from: 24, to: 29 },
-  { from: 27, to: 32 },
-  { from: 26, to: 31 },
-  { from: 66, to: 70 },
-  { from: 23, to: 28 },
-  { from: 63, to: 67 },
-  { from: 64, to: 68 },
-  { from: 25, to: 30 },
-  { from: 65, to: 69 },
-  // 右眉
-  { from: 18, to: 22 },
-  { from: 17, to: 21 },
-  { from: 16, to: 20 },
-  { from: 15, to: 19 },
-  // 右目
-  { from: 29, to: 24 },
-  { from: 32, to: 27 },
-  { from: 31, to: 26 },
-  { from: 69, to: 65 },
-  { from: 30, to: 25 },
-  { from: 68, to: 64 },
-  { from: 67, to: 63 },
-  { from: 28, to: 23 },
-  { from: 70, to: 66 },
-  // 鼻
-  { from: 33, to: 33 },
-  { from: 41, to: 41 },
-  { from: 62, to: 62 },
-  { from: 37, to: 37 },
-  { from: 34, to: 40 },
-  { from: 35, to: 39 },
-  { from: 36, to: 38 },
-  { from: 42, to: 43 },
-  { from: 43, to: 42 },
-  { from: 38, to: 36 },
-  { from: 39, to: 35 },
-  { from: 40, to: 34 },
-  // 口
-  { from: 47, to: 47 },
-  { from: 46, to: 48 },
-  { from: 45, to: 49 },
-  { from: 44, to: 50 },
-  { from: 61, to: 59 },
-  { from: 60, to: 60 },
-  { from: 56, to: 58 },
-  { from: 57, to: 57 },
-  { from: 55, to: 51 },
-  { from: 54, to: 52 },
-  { from: 53, to: 53 },
-  { from: 52, to: 54 },
-  { from: 51, to: 55 },
-  { from: 50, to: 44 },
-  { from: 58, to: 56 },
-  { from: 59, to: 61 },
-  { from: 49, to: 45 },
-  { from: 48, to: 46 },
-];
-
-export const FaceTracker = ({ video }) => {
+export const FaceTracker = ({ video, canvasId, avatarId }) => {
   const useStyles = makeStyles(() => ({
     video: {
       transform: "scaleX(-1)",
+      display: "none",
     },
     canvas: {
       display: "none",
     },
+    glcanvas:{
+      // width: "200",
+      // height: "200",
+    }
   }));
 
   const classes = useStyles();
@@ -104,27 +21,14 @@ export const FaceTracker = ({ video }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const [params, setParams] = useState({});
+  const ctrackerRef = useRef(null);
 
-  const swapPosition = (positions) => {
-    if (positions === false) {
-      return false;
-    }
-
-    let afterSwappingPosition = [];
-    for (let i = 0; i < faceCoordinateIndexForMapping.length; i++) {
-      afterSwappingPosition[faceCoordinateIndexForMapping[i].to] =
-        positions[faceCoordinateIndexForMapping[i].from];
-    }
-
-    return afterSwappingPosition;
-  };
-
-  const drawFacePosition = (ctx, p) => {
-    for (let i = 0; i < p.length; i++) {
-      ctx.fillText(i, p[i][0], p[i][1]);
-    }
-  };
+  let L2D_XRef = useRef(null);
+  let L2D_YRef = useRef(null);
+  let L2D_ZRef = useRef(null);
+  let mlRef = useRef(null);
+  let mrRef = useRef(null);
+  let moRef = useRef(null);
 
   const getDistance2 = (position, a, b) => {
     return (
@@ -133,38 +37,39 @@ export const FaceTracker = ({ video }) => {
     );
   };
 
-  let cc = null;
-  let ctracker = null;
-
   useEffect(() => {
-    // if (videoRef.current && canvasRef.current) {
     if (videoRef.current) {
       videoRef.current.srcObject = video.stream;
 
-      ctracker = new clm.tracker();
-      ctracker.init(pModel);
+      ctrackerRef.current = new clm.tracker();
 
-      ctracker.start(videoRef.current);
+      ctrackerRef.current.init();
+
+      ctrackerRef.current.start(videoRef.current);
 
       // startを2回実行すると良い
       let box = [0, 0, 400, 260];
-      ctracker.start(videoRef.current, box);
+      ctrackerRef.current.start(videoRef.current, box);
 
       document.addEventListener("clmtrackrConverged", () =>
         console.log("Converged")
       );
       document.addEventListener("clmtrackrLost", () => console.log("Lost"));
 
-      // cc = canvasRef.current.getContext("2d");
-
       let parameter = {};
 
-      function loop() {
-        // 毎フレーム出力用のキャンバスをクリアする．これをしないと重ね書きのようになってしまう．
-        // cc.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      let glcanvas = new Simple3(canvasId, avatarId);
 
-        let positions = ctracker.getCurrentPosition();
-        // const positions = swapPosition(positionsFromCtracker);
+      function loop() {
+        var L2D_X = document.getElementById("L2D_X"+"_"+canvasId);
+        var L2D_Y = document.getElementById("L2D_Y"+"_"+canvasId);
+        var L2D_Z = document.getElementById("L2D_Z"+"_"+canvasId);
+        var ml = document.getElementById("ml"+"_"+canvasId);
+        var mr = document.getElementById("mr"+"_"+canvasId);
+        var mo = document.getElementById("mo"+"_"+canvasId);
+    
+
+        let positions = ctrackerRef.current.getCurrentPosition();
 
         if (positions) {
           let faceR = Math.sqrt(getDistance2(positions, 37, 2));
@@ -191,47 +96,33 @@ export const FaceTracker = ({ video }) => {
             ) *
             (180 / Math.PI);
           // mouth
-          parameter["PARAM_MOUTH_OPEN_Y"] = mouthH / lipH - 0.5;
-          parameter["PARAM_MOUTH_FORM"] =
-            2 *
-              Math.sqrt(
-                getDistance2(positions, 50, 44) /
-                  getDistance2(positions, 30, 25)
-              ) -
-            1;
-          // eye ball
-          parameter["PARAM_EYE_BALL_X"] =
-            Math.sqrt(
-              getDistance2(positions, 27, 23) / getDistance2(positions, 25, 23)
-            ) - 0.5;
-          parameter["PARAM_EYE_BALL_Y"] =
-            Math.sqrt(
-              getDistance2(positions, 27, 24) / getDistance2(positions, 26, 24)
-            ) - 0.5;
+          parameter["PARAM_MOUTH_OPEN_Y"] =
+            mouthH / lipH - 0.5;
           // eye brow
           parameter["PARAM_BROW_L_Y"] =
             (2 * Math.sqrt(getDistance2(positions, 24, 21))) / lipH - 4;
           parameter["PARAM_BROW_R_Y"] =
             (2 * Math.sqrt(getDistance2(positions, 29, 17))) / lipH - 4;
-        }
 
-        console.log(parameter);
-        setParams((prevParams) => parameter);
-        console.log(params);
+          L2D_X.value = parameter["PARAM_ANGLE_X"];
+          L2D_Y.value = parameter["PARAM_ANGLE_Y"];
+          L2D_Z.value = parameter["PARAM_ANGLE_Z"];
 
-        if (positions !== false) {
-          // drawFacePosition(cc, positions);
+          ml.value = parameter["PARAM_BROW_L_Y"];
+          mr.value = parameter["PARAM_BROW_R_Y"];
+          mo.value = parameter["PARAM_MOUTH_OPEN_Y"];
         }
-        // ここで毎フレームdrawLoopを呼び出すように設定する．
+        // ここで毎フレームloopを呼び出すように設定する．
         requestAnimationFrame(loop);
       }
 
-      // ここで毎フレームdrawLoopを呼び出すように設定する．
       requestAnimationFrame(loop);
     }
 
     return () => {
-      ctracker.stop();
+      if(ctrackerRef.current){
+        ctrackerRef.current.stop();
+      }
     };
   }, [video]);
 
@@ -251,7 +142,99 @@ export const FaceTracker = ({ video }) => {
         width={400}
         height={300}
       ></canvas>
-      <Live2DCanvas params={params}></Live2DCanvas>
+      <canvas className={classes.glcanvas} id={"glcanvas" + "_" + canvasId} />
+      <div style={{ display: "none" }}>
+        PARAM_Y
+        <input
+          type="range"
+          id={"L2D_Y" + "_" + canvasId}
+          ref={L2D_YRef}
+          defaultValue="0.0"
+          min="-70.0"
+          max="70.0"
+          step="1.0"
+        />
+        PARAM_X
+        <input
+          type="range"
+          id={"L2D_X" + "_" + canvasId}
+          ref={L2D_XRef}
+          defaultValue="0.0"
+          min="-70.0"
+          max="70.0"
+          step="1.0"
+        />
+        PARAM_Z
+        <input
+          type="range"
+          id={"L2D_Z" + "_" + canvasId}
+          ref={L2D_ZRef}
+          defaultValue="0.0"
+          min="-70.0"
+          max="70.0"
+          step="1.0"
+        />
+        ml
+        <input
+          type="range"
+          id={"ml" + "_" + canvasId}
+          ref={mlRef}
+          defaultValue="0.0"
+          min="-1.0"
+          max="1.0"
+          step="1.0"
+        />
+        mr
+        <input
+          type="range"
+          id={"mr" + "_" + canvasId}
+          ref={mrRef}
+          defaultValue="0.0"
+          min="-1.0"
+          max="1.0"
+          step="1.0"
+        />
+        mo
+        <input
+          type="range"
+          id={"mo" + "_" + canvasId}
+          ref={moRef}
+          defaultValue="0.0"
+          min="-1.0"
+          max="2.0"
+          step="0.5"
+        />
+        <br />
+        サイズ
+        <input
+          type="range"
+          id="SCALE"
+          defaultValue="3.0"
+          min="0.0"
+          max="5.0"
+          step="0.1"
+        />
+        <br />
+        位置X
+        <input
+          type="range"
+          id="POS_X"
+          defaultValue="0.0"
+          min="-3.0"
+          max="3.0"
+          step="0.1"
+        />
+        <br />
+        位置Y
+        <input
+          type="range"
+          id="POS_Y"
+          defaultValue="-0.8"
+          min="-3.0"
+          max="3.0"
+          step="0.1"
+        />
+      </div>
     </Grid>
   );
 };
