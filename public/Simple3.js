@@ -47,6 +47,12 @@ var Simple3 = function (canvasid, id) {
       model: "../../assets/koharu/koharu.moc",
       textures: ["../../assets/koharu/koharu.2048/texture_00.png"],
     },
+    {
+      type: "Live2D Model Setting",
+      name: "mida",
+      model: "../../assets/mida/mida.moc",
+      textures: ["../../assets/mida/mida.2048/texture_00.png"],
+    },
   ];
 
   this.modelDef = MODEL_DEF[id];
