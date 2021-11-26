@@ -8,6 +8,16 @@ import { MovieModal } from "./MovieModal";
 import { FaceTracker } from "./FaceTracker";
 import { useAuthContext } from "../context/authcontext";
 
+const setStyles = (theme) => {
+  return makeStyles({
+    btna: {
+      height: "200%",
+      width: "200%",
+      backgroundColor: "red",
+    },
+  });
+};
+
 const Movie = (props) => {
   const { isAdmin } = useAuthContext();
   const history = useHistory();
@@ -78,7 +88,6 @@ const Movie = (props) => {
           });
           let localStream = await stream;
           $("#video")[0].srcObject = localStream;
-          isSS = 1;
           console.log(localStream.getAudioTracks());
           tmpRoom.replaceStream(localStream);
         }
@@ -97,6 +106,10 @@ const Movie = (props) => {
 
       // Room に Join している他のユーザのストリームを受信した時
       tmpRoom.on("stream", async (stream) => {
+        console.log("~~~~~~~~~~~~~~~~~~~~~~");
+        if (stream.peerId == peer.peerId) {
+          console.log("|||||||||||||||||||||||||")
+        }
         $("#video")[0].srcObject = stream;
         //$("#video")[0].getAudioTracks()[0].forEach(track => track.enabled = true);
         setRemoteVideo((prev) => [
@@ -143,13 +156,13 @@ const Movie = (props) => {
 
   return (
     <Container>
-      <Button onClick={() => onLeave()}>Leave</Button>
+      <Button style={setStyles.btna} onClick={() => onLeave()}>Leave</Button>
+      <video id="video" width="960" height="960" autoPlay></video>
       <Grid container>
         <FaceTracker video={ {stream: localStream, peerId: "local-stream"} } canvasId={0} avatarId={0}></FaceTracker>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
-      <video id="video" width="820" height="960" autoPlay></video>
     </Container>
   );
 };

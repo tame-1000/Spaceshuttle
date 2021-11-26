@@ -8,3 +8,8 @@
   position: fixed;
   width: 100%;
 }
+
+#video {
+  margin-top: -17%;
+  margin-bottom: -30%;
+}
