@@ -5,6 +5,7 @@ export const FaceTracker = ({ video, canvasId, avatarId }) => {
   const useStyles = makeStyles(() => ({
     video: {
       transform: "scaleX(-1)",
+      display: "none",
     },
     canvas: {
       display: "none",

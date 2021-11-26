@@ -211,7 +211,7 @@ Simple3.prototype.draw = function (gl /*WebGLコンテキスト*/, that) {
   var mmat = new L2DModelMatrix(width, height);
 
   // サイズ(幅)
-  mmat.setWidth(3);
+  mmat.setWidth(2.5);
 
   // ポジション(X, Y)
   mmat.setCenterPosition(0.0, -0.9);
