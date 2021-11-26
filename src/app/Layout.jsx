@@ -13,7 +13,6 @@ const Layout = (props) => {
         <div
           style={{
             paddingTop: "80px",
-            height: "100%",
             backgroundColor: "#F8F8FF",
           }}
         >
