@@ -17,14 +17,8 @@ import {
   Box,
 } from "@material-ui/core";
 
-import ImageSrc from "../img/seats.jpg";
-
 const useStyles = (theme) => {
   return makeStyles({
-    container: {
-      height: "100%",
-      backgroundImage: `url(${ImageSrc})`,
-    },
     form: {
       backgroundColor: "#f2f2f2",
       padding: "16px",
@@ -59,7 +53,6 @@ const modalStyles = {
 const RoomSetting = () => {
   const { user, isAdmin } = useAuthContext();
   const [movieList, setMovieList] = useState([]);
-  const [sumbnailList, setSumbnailList] = useState({});
   const [groupname, setGroupname] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
   const [movie, setMovie] = useState();
@@ -80,36 +73,15 @@ const RoomSetting = () => {
           querySnapshot.forEach((doc) => {
             let data = doc.data();
             data["movieid"] = doc.id; // 動画idを保存
+            data[
+              "image"
+            ] = `https://storage.googleapis.com/tame1000-f44bc.appspot.com/${doc.id}.png`;
             current_movielist.push(data); // （title, desc, movieid）
           });
         });
       setMovieList(current_movielist);
     })();
   }, []);
-
-  useEffect(() => {
-      let sumbnail_obj = {};
-      (async () => {
-        for (let i = 0; i < movieList.length; i++) {
-            let movieid = movieList[i].movieid;
-            if (sumbnail_obj[movieid]){ //一度読み込んだことのあるサムネイルの場合
-                data["image"] = sumbnail_obj[movieid];
-            }else{ //読み込んだことのないサムネイルの場合
-                await storage
-                    .ref()
-                    .child(`${movieid}.png`)
-                    .getDownloadURL()
-                    .then((url) => {
-                        console.log(url);
-                        // urlをdataオブジェクトの要素に追加
-                        sumbnail_obj[movieid] = url;
-                        // キャッシュに保存
-                    });
-            }
-        }
-        setSumbnailList(sumbnail_obj);
-       })();
-  }, [movieList]);
 
   const onChangeGroupName = (e) => {
     const currentGroupName = e.target.value;
@@ -215,7 +187,7 @@ const RoomSetting = () => {
                   <RoomCard
                     title={content.title}
                     desc={content.desc}
-                    img={sumbnailList[content.movieid]}
+                    img={content.image}
                     index={index}
                     key={index}
                     movieid={content.movieid}

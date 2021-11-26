@@ -43,7 +43,7 @@ const MovieCard = (props) => {
         <CardActionArea>
           <CardMedia
             component="img"
-            height="140"
+            height="250"
             image={props.img}
             alt={props.title}
           />
