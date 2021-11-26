@@ -233,7 +233,6 @@ export const Live2DCanvas = ({ params, canvasId }) => {
       setParams(model, params);
     }
   }, [params]);
-
   return <canvas ref={canvasRef} width={60} height={80}></canvas>;
 };
 

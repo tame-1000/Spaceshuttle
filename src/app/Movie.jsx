@@ -42,7 +42,7 @@ const Movie = (props) => {
 
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({ video: true, audio: false })
       .then((stream) => {
         setLocalStream(stream);
         if (localVideoRef.current) {
@@ -78,6 +78,8 @@ const Movie = (props) => {
           });
           let localStream = await stream;
           $("#video")[0].srcObject = localStream;
+          isSS = 1;
+          console.log(localStream.getAudioTracks());
           tmpRoom.replaceStream(localStream);
         }
       };
@@ -95,6 +97,8 @@ const Movie = (props) => {
 
       // Room に Join している他のユーザのストリームを受信した時
       tmpRoom.on("stream", async (stream) => {
+        $("#video")[0].srcObject = stream;
+        //$("#video")[0].getAudioTracks()[0].forEach(track => track.enabled = true);
         setRemoteVideo((prev) => [
           ...prev,
           { stream: stream, peerId: stream.peerId },
@@ -120,9 +124,9 @@ const Movie = (props) => {
   const onLeave = () => {
     if (room) {
       room.close();
+      // ss.stop();
       setRemoteVideo((prev) => {
         return prev.filter((video) => {
-          ss.stop();
           video.stream.getTracks().forEach((track) => track.stop());
           return false;
         });
@@ -145,7 +149,7 @@ const Movie = (props) => {
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
-      <video id="video" muted="true" width="480" height="240" autoPlay></video>
+      <video id="video" width="820" height="960" autoPlay></video>
     </Container>
   );
 };
