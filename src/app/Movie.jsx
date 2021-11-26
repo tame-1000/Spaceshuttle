@@ -7,7 +7,6 @@ import Peer from "skyway-js";
 import { MovieModal } from "./MovieModal";
 import { FaceTracker } from "./FaceTracker";
 import { useAuthContext } from "../context/authcontext";
-import { CubismFramework } from "../cubismSDK/Framework/src/live2dcubismframework";
 
 const Movie = (props) => {
   const { isAdmin } = useAuthContext();
@@ -33,12 +32,6 @@ const Movie = (props) => {
     })
   );
 
-  // prepare for Cubism Framework API.
-  CubismFramework.startUp();
-
-  // initialize cubism
-  CubismFramework.initialize();
-
   const roomMode = "mesh";
 
   const [remoteVideo, setRemoteVideo] = useState([]);
@@ -60,10 +53,6 @@ const Movie = (props) => {
       .catch((e) => {
         console.log(e);
       });
-
-      return () => {
-        CubismFramework.dispose();
-      };
   }, []);
 
   const onJoin = () => {
@@ -144,7 +133,7 @@ const Movie = (props) => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <FaceTracker video={video} key={video.peerId} />;
+      return <FaceTracker video={video} canvasId={1} avatarId={0}/>;
     });
   };
 
@@ -152,19 +141,12 @@ const Movie = (props) => {
     <Container>
       <Button onClick={() => onLeave()}>Leave</Button>
       <Grid container>
-        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} }></FaceTracker>
+        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} } canvasId={0} avatarId={0}></FaceTracker>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
       <video id="video" muted="true" width="480" height="240" autoPlay></video>
     </Container>
-
-    // <Container justify="center" spacing={4}>
-    //   <h1>映画見る画面</h1>
-    //   <Link to="/" style={{ textDecoration: "none" }}>
-    //     <Button variant="outlined">トップページに戻る</Button>
-    //   </Link>
-    // </Container>
   );
 };
 
