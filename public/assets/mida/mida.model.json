@@ -1,8 +1,0 @@
-{
-	"type": "Live2D Model Setting",
-	"name": "mida",
-	"model": "mida.moc",
-	"textures": [
-		"mida.2048/texture_00.png"
-	]
-}
