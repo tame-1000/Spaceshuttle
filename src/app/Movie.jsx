@@ -11,8 +11,6 @@ import { useAuthContext } from "../context/authcontext";
 const setStyles = (theme) => {
   return makeStyles({
     btna: {
-      height: "200%",
-      width: "200%",
       backgroundColor: "red",
     },
   });
