@@ -43,18 +43,15 @@ var Simple3 = function (canvasid, id) {
   var MODEL_DEF = [
     {
       type: "Live2D Model Setting",
-      name: "Corinne",
-      model: "../../assets/Corinne/Corinne.moc",
-      textures: [
-        "../../assets/Corinne/Corinne.2048/texture_00.png",
-        "../../assets/Corinne/Corinne.2048/texture_01.png",
-      ],
-    },
-    {
-      type: "Live2D Model Setting",
       name: "mida",
       model: "../../assets/mida/mida.moc",
       textures: ["../../assets/mida/mida.2048/texture_00.png"],
+    },
+    {
+      type: "Live2D Model Setting",
+      name: "koharu",
+      model: "../../assets/koharu/koharu.moc",
+      textures: ["../../assets/koharu/texture_00.png"],
     },
   ];
 
@@ -120,11 +117,7 @@ Simple3.prototype.initLoop = function (canvas /*HTML5 canvasオブジェクト*/
     return;
   }
 
-  gl.enable(gl.BLEND);
-  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   gl.clearColor(0.0, 0.0, 0.0, 0.0);
-  gl.enable(gl.DEPTH_TEST);
-  gl.depthFunc(gl.LEQUAL);
 
   //------------ Live2Dの初期化 ------------
 

@@ -49,6 +49,7 @@ const Movie = (props) => {
   const [room, setRoom] = useState();
   const [isJoin, setIsJoin] = useState(false);
   const localVideoRef = useRef(null);
+  const canvasIdRef = useRef(1);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -150,7 +151,7 @@ const Movie = (props) => {
 
   const castVideo = () => {
     return remoteVideo.map((video) => {
-      return <FaceTracker video={video} canvasId={1} avatarId={0}/>;
+      return <FaceTracker video={video} canvasId={canvasIdRef.current++} avatarId={1}/>;
     });
   };
 
@@ -159,7 +160,7 @@ const Movie = (props) => {
       <Button style={setStyles.btna} onClick={() => onLeave()}>Leave</Button>
       <video id="video" width="960" height="960" autoPlay></video>
       <Grid container>
-        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} } canvasId={0} avatarId={0}></FaceTracker>
+        <FaceTracker video={ {stream: localStream, peerId: "local-stream"} } canvasId={0} avatarId={1}></FaceTracker>
         {castVideo()}
       </Grid>
       <MovieModal onJoin={onJoin}></MovieModal>
