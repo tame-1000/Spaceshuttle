@@ -14,7 +14,7 @@ import {
   CardMedia,
 } from "@material-ui/core";
 
-import ImageSrc from "../img/seats.jpg";
+import ImageSrc from "../img/bear_living.jpg";
 
 import { auth } from "../firebase/firebase";
 
@@ -136,12 +136,20 @@ const Signin = () => {
                 */}
               <Grid container>
                 <Grid item xs>
-                  <Link to="#" variant="body2" style={{textDecoration: "none"}}>
+                  <Link
+                    to="#"
+                    variant="body2"
+                    style={{ textDecoration: "none" }}
+                  >
                     パスワードをお忘れですか？
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link to="/register" variant="body2" style={{textDecoration: "none"}}>
+                  <Link
+                    to="/register"
+                    variant="body2"
+                    style={{ textDecoration: "none" }}
+                  >
                     {"ユーザ登録へ"}
                   </Link>
                 </Grid>

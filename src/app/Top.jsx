@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { useHistory, Redirect } from "react-router-dom";
 import { useTheme, makeStyles, Theme, Avatar } from "@material-ui/core";
@@ -13,7 +13,12 @@ import {
   Box,
   Typography,
   CardMedia,
+  CardActionArea,
+  CardContent,
 } from "@material-ui/core";
+
+import MovieCard from "../component/MovieCard";
+import { auth, db, storage } from "../firebase/firebase";
 
 const useStyles = (theme) => {
   return makeStyles({
@@ -25,8 +30,8 @@ const useStyles = (theme) => {
       width: "90%",
       height: 100,
     },
-    button: {
-      width: "100%",
+    personIcon: {
+      marginTop: "1em",
     },
   });
 };
@@ -35,69 +40,72 @@ const Top = () => {
   const history = useHistory();
   const { user } = useAuthContext();
   const theme = useTheme();
-  const styles = useStyles(theme)();
+  const styles = useStyles(theme);
+  const [roomlist, setRoomlist] = useState([""]);
+
+  // 最初のレンダリングで動画データを読み込む
+  useEffect(() => {
+    (async () => {
+      const current_roomlist = [];
+      // 部屋データを取得し、リストに（roomid, movieid, people, groupname）
+      const res_room = await db
+        .collection("room")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            let data = doc.data();
+            data["roomid"] = doc.id; // ルームidを保存
+            current_roomlist.push(data);
+          });
+        });
+      // 部屋リストの各要素ごとに、動画データを取得する（title, desc）
+      for (let i = 0; i < current_roomlist.length; i++) {
+        let movieid = current_roomlist[i].movieid;
+        current_roomlist[i]["image"] = `https://storage.googleapis.com/tame1000-f44bc.appspot.com/${movieid}.png`;
+        // urlをroomオブジェクトの要素に追加
+        const res_movie = await db
+          .collection("movie")
+          .doc(movieid)
+          .get()
+          .then((docSnapshot) => {
+            const movie_data = docSnapshot.data();
+            // 動画タイトルと説明を保存
+            current_roomlist[i]["title"] = movie_data.title;
+            current_roomlist[i]["desc"] = movie_data.desc;
+          });
+      }
+      setRoomlist(current_roomlist); // トップページに表示する動画リストのstateを更新
+    })();
+  }, []);
+
+  // 個別動画ページに飛ぶ関数
+  const pushLink = (roomid) => {
+
+    history.push(`/movie/${roomid}`);
+  };
 
   if (!user) {
+    // ログインしていないときはサインインページに
     return <Redirect to="/signin" />;
   } else {
+    // ログインしたらトップページを描写
     return (
-      <>
-        <Grid container justifyContent="space-around" className={styles.container} >
-        <Grid item xs={12} md={3} component={Paper} square>
-          <Link to="/moviesetting" style={{ textDecoration: "none" }}>
-            <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-              <Button variant="contained" color="primary">
-                部屋を作る
-              </Button>
-            </Box>
-        </Link>
+      <Container>
+        <Grid container spacing={5}>
+          {roomlist.map((content, index) => (
+            <MovieCard
+              title={content.groupname}
+              desc={content.title}
+              img={content.image}
+              num={content.people}
+              index={index}
+              key={index}
+              roomid={content.roomid}
+              onClick={pushLink}
+            ></MovieCard>
+          ))}
         </Grid>
-            
-        <Grid item xs={12} md={3} component={Paper} square>
-          <Link to="/movie" style={{ textDecoration: "none" }}>
-            <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-              <Button variant="contained" color="primary">
-                映画を見る
-              </Button>
-            </Box>
-          </Link>
-        </Grid>
-            
-        <Grid item xs={12} md={3} component={Paper} square>
-          <Link to="/profile" style={{ textDecoration: "none" }}>
-            <Box
-              sx={{
-                my: 8,
-                mx: 4,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Button variant="outlined" color="primary">
-                プロフィール
-              </Button>
-            </Box>
-          </Link>
-        </Grid>
-      </Grid>
-      </>
+      </Container>
     );
   }
 };

@@ -6,10 +6,31 @@ import Nav from "./Nav";
 
 const Layout = (props) => {
   const location = useLocation();
+
   return (
     <>
       <AuthProvider>
-        <div style={{ height: "100%" }}>{props.children}</div>
+        <Nav pathname={location.pathname}></Nav>
+        {location.pathname !== "/signin" &&
+        location.pathname !== "/register" ? (
+          <div
+            style={{
+              paddingTop: "80px",
+              backgroundColor: "#F8F8FF",
+              minHeight: "100%",
+            }}
+          >
+            {props.children}
+          </div>
+        ) : (
+          <div
+            style={{
+              height: "100%",
+            }}
+          >
+            {props.children}
+          </div>
+        )}
       </AuthProvider>
     </>
   );

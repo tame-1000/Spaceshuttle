@@ -14,26 +14,25 @@ import {
   CardMedia,
 } from "@material-ui/core";
 
-import ImageSrc from "../img/stage2.jpg";
+import ImageSrc from "../img/living_room.jpg";
 
 import { auth } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 
 const useStyles = (theme) => {
   return makeStyles({
     container: {
       height: "100%",
-      backgroundImage: `url(${ImageSrc})`,
     },
     form: {
-      backgroundColor: "#f2f2f2",
-      padding: "16px",
+        backgroundColor: "#e7e4db",
     },
     textField: {
       width: "90%",
       height: 100,
     },
     button: {
-      width: "100%",
+      width: "90%",
     },
   });
 };
@@ -60,6 +59,7 @@ const Register = () => {
     } else {
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
+        await createUserToFirestore(email);
         history.push("/signin");
       } catch (error) {
         console.log(error.code);
@@ -77,20 +77,38 @@ const Register = () => {
     }
   };
 
+  // Firestoreにユーザーを追加する
+  const createUserToFirestore = async (email) => {
+    try {
+      await db
+        .collection("users")
+        .doc(email)
+        .set({ email: email, avatarid: 1 });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Grid container className={styles.container} justifyContent="center">
-          <Grid item xs={7} className={styles.form}>
-            <Typography component="h1" variant="h5">
-              ユーザ登録
-            </Typography>
+        <Grid container className={styles.container}>
+          <Grid item className={styles.form} xs={12} sm={8} md={5} component={Paper} elevation={6} square>
             <Box
               component="form"
               noValidate
               onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
+              sx={{ 
+                my: 8,
+                mx: 4,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+             }}
             >
+              <Typography component="h1" variant="h5">
+                  ユーザ登録
+              </Typography>
               <TextField
                 className={styles.textField}
                 id="email"
@@ -132,7 +150,7 @@ const Register = () => {
               ></TextField>
               <Button
                 type="button"
-                fullWidth
+                className={styles.button}
                 variant="contained"
                 color="primary"
                 sx={{ mt: 3, mb: 2 }}
@@ -146,6 +164,9 @@ const Register = () => {
                     />
                     */}
             </Box>
+          </Grid>
+          <Grid item xs={false} sm={4} md={7} sx={{ height: "100vh" }}>
+            <CardMedia component="img" height="100%" image={ImageSrc} />
           </Grid>
         </Grid>
       </ThemeProvider>

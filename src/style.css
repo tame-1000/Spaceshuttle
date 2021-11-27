@@ -1,4 +1,15 @@
 * {
-    margin: 0;
-    padding: 0;
-  }
+  margin: 0;
+  padding: 0;
+  font-family: "Zen Kurenaido", sans-serif !important;
+}
+
+.ReactModal__Body--open {
+  position: fixed;
+  width: 100%;
+}
+
+#video {
+  margin-top: -17%;
+  margin-bottom: -30%;
+}

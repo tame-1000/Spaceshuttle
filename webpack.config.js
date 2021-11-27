@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const path = require("path");
 
+const Dotenv = require("dotenv-webpack");
+
 module.exports = {
   mode: "development",
   entry: "./src/app/app.jsx",
@@ -10,6 +12,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "src/templates/index.html",
     }),
+    new Dotenv(),
   ],
   output: {
     path: path.resolve(__dirname, "public"),
@@ -18,10 +21,17 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, "node_modules")],
     extensions: [".ts", ".tsx", ".js", ".jsx"],
+    alias: {
+      '@framework': path.resolve(__dirname, './src/cubismSDK/Framework/src')
+    }
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: "ts-loader" },
+      { 
+        test: /\.(ts|tsx)?$/,
+        exclude: /node_modules/,
+        loader: "ts-loader"
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
@@ -51,6 +61,11 @@ module.exports = {
         loader: "file-loader",
         options: {},
       },
+      // {
+      //   test: /.ts$/,
+      //   exclude: /node_modules/,
+      //   loader: 'ts-loader'
+      // },
     ],
   },
   devServer: {
@@ -59,4 +74,5 @@ module.exports = {
     },
     port: 9000,
   },
+  // devtool: 'source-map',
 };
