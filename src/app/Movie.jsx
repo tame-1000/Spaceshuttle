@@ -35,12 +35,23 @@ const Movie = (props) => {
   // roomIdはpropsとして受け取るように実装する
   // const roomId = "test";
 
-  const peer = useRef(
-    new Peer({
-      key: process.env.SKYWAY_KEY,
-      debug: 3,
-    })
-  );
+  let peer = null;
+
+  if(isAdmin){
+    peer = useRef(
+      new Peer("admin", {
+        key: process.env.SKYWAY_KEY,
+        debug: 3,
+      })
+    );
+  }else{
+    peer = useRef(
+      new Peer({
+        key: process.env.SKYWAY_KEY,
+        debug: 3,
+      })
+    );   
+  }
 
   const roomMode = "mesh";
 
@@ -112,12 +123,16 @@ const Movie = (props) => {
         if (stream.peerId == peer.peerId) {
           console.log("|||||||||||||||||||||||||")
         }
-        $("#video")[0].srcObject = stream;
+
+        if(stream.peerId == "admin"){
+          $("#video")[0].srcObject = stream;
+        }else{
+          setRemoteVideo((prev) => [
+            ...prev,
+            { stream: stream, peerId: stream.peerId },
+          ]);
+        }
         //$("#video")[0].getAudioTracks()[0].forEach(track => track.enabled = true);
-        setRemoteVideo((prev) => [
-          ...prev,
-          { stream: stream, peerId: stream.peerId },
-        ]);
       });
 
       // 他のユーザがroomを退出した時
