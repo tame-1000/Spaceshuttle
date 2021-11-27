@@ -50,6 +50,7 @@ const Movie = (props) => {
   const [isJoin, setIsJoin] = useState(false);
   const localVideoRef = useRef(null);
   const canvasIdRef = useRef(1);
+  const avatarIdRef = useRef(2);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -150,8 +151,8 @@ const Movie = (props) => {
   };
 
   const castVideo = () => {
-    return remoteVideo.map((video) => {
-      return <FaceTracker video={video} canvasId={canvasIdRef.current++} avatarId={1}/>;
+    return remoteVideo.map((video, index) => {
+      return <FaceTracker video={video} canvasId={index+1} avatarId={index+2}/>;
     });
   };
 

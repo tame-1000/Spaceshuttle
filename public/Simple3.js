@@ -49,9 +49,30 @@ var Simple3 = function (canvasid, id) {
     },
     {
       type: "Live2D Model Setting",
+      name: "Epsilon",
+      model: "../../assets/Epsilon/Epsilon.moc",
+      textures: ["../../assets/Epsilon/Epsilon.2048/texture_00.png"],
+    },
+    {
+      type: "Live2D Model Setting",
+      name: "nito",
+      model: "../../assets/nito/nito.moc",
+      textures: [
+        "../../assets/nito/nito.2048/texture_00.png",
+        "../../assets/nito/nito.2048/texture_01.png",
+      ],
+    },
+    {
+      type: "Live2D Model Setting",
       name: "koharu",
       model: "../../assets/koharu/koharu.moc",
       textures: ["../../assets/koharu/texture_00.png"],
+    },
+    {
+      type: "Live2D Model Setting",
+      name: "hijiki",
+      model: "../../assets/hijiki/hijiki.moc",
+      textures: ["../../assets/hijiki/hijiki.2048/texture_00.png"],
     },
   ];
 
