@@ -24,3 +24,7 @@ memo.md
 # dist
 src/cubismSDK/Framework/dist/
 src/cubismSDK/Demo/dist/
+
+# firebase
+.firebaserc
+.firebase
